@@ -8,7 +8,6 @@ import android.content.pm.ConfigurationInfo;
 import android.opengl.GLSurfaceView;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.Menu;
 import android.widget.Toast;
 
 
@@ -36,10 +35,11 @@ public class MainActivity extends AppCompatActivity {
                         || Build.MODEL.contains("google_sdk")
                         || Build.MODEL.contains("Emulator")
                         || Build.MODEL.contains("Android SDK built for x86")));
+        final MyRenderer skyboxRender = new MyRenderer(this);
         if(supportEs2){
             glSurfaceView.setEGLContextClientVersion(2);
             //Assign render
-            glSurfaceView.setRenderer(new MyRenderer());
+            glSurfaceView.setRenderer(skyboxRender);
             rendererSet = true;
         }else{
             Toast.makeText(this,"This device does not support OpenglEs 2.0",
