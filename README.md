@@ -2,4 +2,4 @@
 
 **天空盒效果图**
 
-![1575716419320](D:\_pro_\cg\img\skyboximg.png)
+<img src="img\skyboximg.png" alt="1575716419320" style="zoom:50%;" />
