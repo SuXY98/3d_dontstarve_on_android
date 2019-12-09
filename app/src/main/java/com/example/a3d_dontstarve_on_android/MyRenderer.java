@@ -14,8 +14,8 @@ import static android.opengl.Matrix.translateM;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import Skybox.SkyboxShaderProgram;
-import Skybox.Skybox;
+import com.example.a3d_dontstarve_on_android.Skybox.SkyboxShaderProgram;
+import com.example.a3d_dontstarve_on_android.Skybox.Skybox;
 import util.MatrixHelper;
 import util.TextureHelper;
 

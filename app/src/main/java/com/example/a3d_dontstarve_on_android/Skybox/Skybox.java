@@ -1,4 +1,4 @@
-package Skybox;
+package com.example.a3d_dontstarve_on_android.Skybox;
 
 import data.VertexAarray;
 

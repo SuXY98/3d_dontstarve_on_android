@@ -1,4 +1,4 @@
-package Skybox;
+package com.example.a3d_dontstarve_on_android.Skybox;
 
 import static android.opengl.GLES20.GL_TEXTURE0;
 import static android.opengl.GLES20.GL_TEXTURE_CUBE_MAP;
@@ -11,8 +11,6 @@ import static android.opengl.GLES20.glUniformMatrix4fv;
 import android.content.Context;
 
 import com.example.a3d_dontstarve_on_android.R;
-
-import java.nio.ByteBuffer;
 
 import util.ShaderProgram;
 
