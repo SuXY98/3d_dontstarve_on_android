@@ -61,7 +61,9 @@ public class MyRenderer implements GLSurfaceView.Renderer {
                     R.drawable.front, R.drawable.back});
         mCamera = new Camera();
         mCamera.set(0,0,0,0.5f,0,0,0,1,0);
-
+        worldShader = new WorldShaderProgram(context);
+        world = new World();
+        lightLocation = new Vector3f(10, 10, 10);
     }
     @Override
     public void onSurfaceChanged(GL10 glUnused, int width, int height) {
