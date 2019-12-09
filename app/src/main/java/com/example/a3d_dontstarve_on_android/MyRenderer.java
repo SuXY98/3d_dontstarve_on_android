@@ -2,6 +2,8 @@ package com.example.a3d_dontstarve_on_android;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
+import android.renderscript.Matrix4f;
+
 import static android.opengl.GLES20.glClear;
 import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
 import static android.opengl.GLES20.glClearColor;
@@ -16,6 +18,9 @@ import javax.microedition.khronos.opengles.GL10;
 
 import com.example.a3d_dontstarve_on_android.Skybox.SkyboxShaderProgram;
 import com.example.a3d_dontstarve_on_android.Skybox.Skybox;
+import com.example.a3d_dontstarve_on_android.World.World;
+import com.example.a3d_dontstarve_on_android.World.WorldShaderProgram;
+
 import util.MatrixHelper;
 import util.TextureHelper;
 
@@ -30,9 +35,12 @@ public class MyRenderer implements GLSurfaceView.Renderer {
     private final float[] viewProjectionMatrix = new float[16];
 
     private float[] viewMatrix = new float[16];
-
+    private Vector3f lightLocation;
     private SkyboxShaderProgram skyboxProgram;
     private Skybox skybox;
+
+    private WorldShaderProgram worldShader;
+    private World world;
 
     private int skyboxTexture;
 
@@ -65,7 +73,10 @@ public class MyRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onDrawFrame(GL10 glUnused) {
         glClear(GL_COLOR_BUFFER_BIT);
+        InitialWorldParam();
+        world.renderWorld(worldShader, new Matrix4f(projectionMatrix));
         drawSkybox();
+
     }
     public void drawSkybox(){
         /*
@@ -80,5 +91,9 @@ public class MyRenderer implements GLSurfaceView.Renderer {
         skyboxProgram.setUniforms(viewProjectionMatrix,skyboxTexture);
         skybox.bindData(skyboxProgram);
         skybox.draw();
+    }
+    private void InitialWorldParam(){
+        worldShader.useProgram();
+        worldShader.setLightModel(lightLocation, mCamera.getPosition());
     }
 }
