@@ -27,13 +27,17 @@ import util.TextureHelper;
 public class MyRenderer implements GLSurfaceView.Renderer {
     private final Context context;
     private final float[] projectionMatrix = new float[16];
-    private final float[] viewMatrix = new float[16];
     private final float[] viewProjectionMatrix = new float[16];
+
+    private float[] viewMatrix = new float[16];
 
     private SkyboxShaderProgram skyboxProgram;
     private Skybox skybox;
 
     private int skyboxTexture;
+
+    public Camera mCamera;
+
     public MyRenderer(Context context){
         this.context = context;
     }
@@ -47,6 +51,8 @@ public class MyRenderer implements GLSurfaceView.Renderer {
                 new int []{R.drawable.left, R.drawable.right,
                     R.drawable.bottom, R.drawable.top,
                     R.drawable.front, R.drawable.back});
+        mCamera = new Camera();
+        mCamera.set(0,0,0,0.5f,0,0,0,1,0);
 
     }
     @Override
@@ -62,12 +68,13 @@ public class MyRenderer implements GLSurfaceView.Renderer {
         drawSkybox();
     }
     public void drawSkybox(){
-        setIdentityM(viewMatrix,0);
         /*
         * TODO:
         *       if there is camera move yaw and pitch
         *       rotate viewProjection
         * */
+        viewMatrix = mCamera.getViewMatrix();
+
         multiplyMM(viewProjectionMatrix,0,projectionMatrix,0,viewMatrix,0);
         skyboxProgram.useProgram();
         skyboxProgram.setUniforms(viewProjectionMatrix,skyboxTexture);
