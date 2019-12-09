@@ -116,4 +116,12 @@ public class Vector3f {
         this.z = z;
     }
 
+    public float[] toArray() {
+        float[] ret = new float[3];
+        ret[0] = this.x;
+        ret[1] = this.y;
+        ret[2] = this.z;
+        return ret;
+    }
+
 }
