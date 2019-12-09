@@ -1,0 +1,27 @@
+相机维护的私有成员变量有
+Vector3f position 相机位置
+Vector3f view 视点位置
+Vector3f up 相机上方向量
+
+Vector3f n 相机视线方向（单位）向量
+Vector3f v 相机上方（单位）向量
+Vector3f u 相机右侧（单位）向量
+
+float[] mViewMatrix 视矩阵
+
+主要通过维护n，v，u来实现视角调整（position，view，up在每次调整后要相应做出改变），
+维护position，view来实现位置调整
+
+接口：
+rotateWorldY为相机绕世界坐标系的Y轴旋转
+pitch为相机绕其右侧轴旋转
+触摸响应事件主要依靠这两个函数实现对视角的调整
+
+相机的移动通过moveVector实现
+
+相机维护一个mViewMatrix，在glSuraceView中使用getViewMatrix获得，除此之外不需要
+使用glLookAt函数设置viewMatrix
+
+还有一个set函数用于设置相机的各个参数
+
+主要有用的就这些函数，别的还有一些可能在debug的时候可以调用一下，查看输出
