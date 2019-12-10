@@ -44,12 +44,16 @@ public class BaseModel {
     public BaseModel(boolean hasTexture){
         this.textureFlag = hasTexture;
         this.isGenerated = false;
+
+        //Ka, Ks, Kd
         this.K = new Vector3f[MaterialSize];
         this.points = new Vector<>();
         this.normals = new Vector<>();
         this.texture = new Vector<>();
 
-        K[0] = K[1] = K[2] = new Vector3f(1, 1, 1);
+        K[2] = new Vector3f(0.8f, 0.8f, 0.8f);
+        K[0] = new Vector3f(0.2f, 0.2f, 0.2f);
+        K[1] = new Vector3f(0f, 0f, 0f);
     }
     //other features not support yet
     //property of specific objects not saved in this class
@@ -59,8 +63,6 @@ public class BaseModel {
             if(!isGenerated)
                 return;
         }
-        //convert data to float buffer
-        //testBuffer();
         // 获取顶点着色器的位置的句柄
         int mPositionHandler = GLES20.glGetAttribLocation(mProgram, "vPosition");
         // 启用三角形顶点位置的句柄
