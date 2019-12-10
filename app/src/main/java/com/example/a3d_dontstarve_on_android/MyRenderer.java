@@ -16,6 +16,7 @@ import static android.opengl.Matrix.translateM;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import com.example.a3d_dontstarve_on_android.Interface.ArrowButton;
 import com.example.a3d_dontstarve_on_android.Skybox.SkyboxShaderProgram;
 import com.example.a3d_dontstarve_on_android.Skybox.Skybox;
 import com.example.a3d_dontstarve_on_android.World.World;
@@ -30,6 +31,11 @@ import util.TextureHelper;
 */
 
 public class MyRenderer implements GLSurfaceView.Renderer {
+    static float[] identMat = {1, 0, 0, 0,
+                                0, 1, 0, 0,
+                                0, 0, 1, 0,
+                                0, 0, 0, 1};
+
     private final Context context;
     private final float[] projectionMatrix = new float[16];
     private final float[] viewProjectionMatrix = new float[16];
@@ -45,6 +51,10 @@ public class MyRenderer implements GLSurfaceView.Renderer {
     private int skyboxTexture;
 
     public Camera mCamera;
+    private ArrowButton arrowButton;
+
+    private int wWidth;
+    private int wHeight;
 
     public MyRenderer(Context context){
         this.context = context;
@@ -52,6 +62,7 @@ public class MyRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        arrowButton = new ArrowButton(context);
 
         skyboxProgram = new SkyboxShaderProgram(context);
         skybox = new Skybox();
@@ -67,6 +78,8 @@ public class MyRenderer implements GLSurfaceView.Renderer {
     }
     @Override
     public void onSurfaceChanged(GL10 glUnused, int width, int height) {
+        wWidth = width;
+        wHeight = height;
         // Set the OpenGL viewport to fill the entire surface.
         glViewport(0,0,width,height);
         MatrixHelper.perspectiveM(projectionMatrix, 45, (float) width
