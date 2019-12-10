@@ -20,10 +20,10 @@ void main() {
   gl_Position = vMatrix * vec4(vPosition,1);
   vColor=aColor;
   float shininess=10.0;             //粗糙度，越小越光滑
+
   vec3 newNormal=normalize((vMatrix*vec4(normal+vPosition,1)).xyz-(vMatrix*vec4(vPosition,1)).xyz);
   vec3 vp=normalize(lightLocation-(vMatrix*vec4(vPosition,1)).xyz);
   vDiffuse=vec4(vKd,1.0)*max(0.0,dot(newNormal,vp));                //计算散射光的最终强度
-  vDiffuse = vec4(1, 1, 1, 1);
   vec3 eye= normalize(camera-(vMatrix*vec4(vPosition,1)).xyz);
   vec3 halfVector=normalize(vp+eye);    //求视线与光线的半向量
   float nDotViewHalfVector=dot(newNormal,halfVector);   //法线与半向量的点积
@@ -31,6 +31,4 @@ void main() {
 
   vSpecular=vec4(vKs,1.0)*powerFactor;
   vAmbient=vec4(vKa,1.0);
-
 }
-

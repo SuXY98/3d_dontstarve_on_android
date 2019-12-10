@@ -1,12 +1,15 @@
 package com.example.a3d_dontstarve_on_android;
 
 import android.content.Context;
+import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.renderscript.Matrix4f;
 
+import static android.opengl.GLES20.GL_DEPTH_TEST;
 import static android.opengl.GLES20.glClear;
 import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
 import static android.opengl.GLES20.glClearColor;
+import static android.opengl.GLES20.glDisable;
 import static android.opengl.GLES20.glViewport;
 import static android.opengl.Matrix.multiplyMM;
 import static android.opengl.Matrix.rotateM;
@@ -61,6 +64,7 @@ public class MyRenderer implements GLSurfaceView.Renderer {
     }
     @Override
     public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
+
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         arrowButton = new ArrowButton(context);
 
@@ -74,7 +78,7 @@ public class MyRenderer implements GLSurfaceView.Renderer {
         mCamera.set(0,0f,0,0.5f,0,0,0,1,0);
         worldShader = new WorldShaderProgram(context);
         world = new World();
-        lightLocation = new Vector3f(2, 2, 2);
+        lightLocation = new Vector3f(2, 2, -2);
     }
     @Override
     public void onSurfaceChanged(GL10 glUnused, int width, int height) {
@@ -88,18 +92,20 @@ public class MyRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onDrawFrame(GL10 glUnused) {
         glClear(GL_COLOR_BUFFER_BIT);
+
         /*
          * TODO:
          *       if there is camera move yaw and pitch
          *       rotate viewProjection
          * */
         viewMatrix = mCamera.getViewMatrix();
-
         multiplyMM(viewProjectionMatrix,0,projectionMatrix,0,viewMatrix,0);
+
         drawSkybox();
+        GLES20.glEnable(GLES20.GL_DEPTH_TEST);
         InitialWorldParam();
         world.renderWorld(worldShader, new Matrix4f(viewProjectionMatrix));
-
+        glDisable(GL_DEPTH_TEST);
     }
     public void drawSkybox(){
         skyboxProgram.useProgram();
@@ -108,6 +114,7 @@ public class MyRenderer implements GLSurfaceView.Renderer {
         skybox.draw();
     }
     private void InitialWorldParam(){
+        glClear(GLES20.GL_DEPTH_BUFFER_BIT);
         worldShader.useProgram();
         worldShader.setLightModel(lightLocation, mCamera.getPosition());
     }

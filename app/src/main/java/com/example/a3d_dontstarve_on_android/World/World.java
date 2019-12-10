@@ -4,6 +4,7 @@ import android.opengl.GLES20;
 import android.opengl.Matrix;
 import android.renderscript.Matrix4f;
 
+import com.example.a3d_dontstarve_on_android.World.Objs.BallModel;
 import com.example.a3d_dontstarve_on_android.World.Objs.BaseModel;
 import com.example.a3d_dontstarve_on_android.World.Objs.CubeModel;
 import com.example.a3d_dontstarve_on_android.World.Objs.Object;
@@ -17,14 +18,14 @@ public class World {
     public World(){
         objs = new Vector<>();
         models = new Vector<>();
-        models.add(new CubeModel(false));
+        models.add(new BallModel(false, 0.5f));
         Object object = new Object(0);
         float [] mModelView = new float[16];
         Matrix.setIdentityM(mModelView, 0);
 
-        Matrix.rotateM(mModelView, 0, mModelView, 0, 45, 0, 0, 1);
+        //Matrix.rotateM(mModelView, 0, mModelView, 0, 45, 0, 0, 1);
         Matrix.scaleM(mModelView, 0, mModelView, 0, 0.5f, 0.5f, 0.5f);
-        Matrix.translateM(mModelView, 0, mModelView, 0, 0, 0, -5);
+        Matrix.translateM(mModelView, 0, mModelView, 0, 2,-0.5f, 1);
 
         object.setModelViewMat(new Matrix4f(mModelView));
         objs.add(object);

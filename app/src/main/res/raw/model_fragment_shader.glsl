@@ -9,7 +9,7 @@ varying  vec4 vColor;
 void main() {
     //vec4 finalColor=texture2D(vTexture,tCoord);
     vec4 finalColor=  vColor;
-
+    //gl_FragColor = vDiffuse;
     gl_FragColor=finalColor*vAmbient+finalColor*vSpecular+ finalColor*vDiffuse;
 }
 

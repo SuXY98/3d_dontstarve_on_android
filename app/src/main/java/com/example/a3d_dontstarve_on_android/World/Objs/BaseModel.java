@@ -50,7 +50,7 @@ public class BaseModel {
         this.points = new Vector<>();
         this.normals = new Vector<>();
         this.texture = new Vector<>();
-
+        this.planes = new Vector<>();
         K[2] = new Vector3f(0.8f, 0.8f, 0.8f);
         K[0] = new Vector3f(0.2f, 0.2f, 0.2f);
         K[1] = new Vector3f(0f, 0f, 0f);
