@@ -1,6 +1,7 @@
 package com.example.a3d_dontstarve_on_android.World;
 
 import android.content.Context;
+import android.opengl.GLES20;
 
 import com.example.a3d_dontstarve_on_android.R;
 import com.example.a3d_dontstarve_on_android.Vector3f;
@@ -57,7 +58,7 @@ public class WorldShaderProgram extends ShaderProgram {
     public boolean setModelView(float [] matrix){
         if(matrix.length != 16)
             return false;
-        glUniformMatrix4fv(mMatrix, 1, false, matrix, 0);
+        GLES20.glUniformMatrix4fv(mMatrix, 1, false, matrix, 0);
         return true;
     }
 

@@ -60,35 +60,35 @@ public class MyRenderer implements GLSurfaceView.Renderer {
                     R.drawable.bottom, R.drawable.top,
                     R.drawable.front, R.drawable.back});
         mCamera = new Camera();
-        mCamera.set(0,0,0,0.5f,0,0,0,1,0);
+        mCamera.set(0,0.5f,0,0.5f,0,0,0,1,0);
         worldShader = new WorldShaderProgram(context);
         world = new World();
-        lightLocation = new Vector3f(10, 10, 10);
+        lightLocation = new Vector3f(2, 2, 2);
     }
     @Override
     public void onSurfaceChanged(GL10 glUnused, int width, int height) {
         // Set the OpenGL viewport to fill the entire surface.
         glViewport(0,0,width,height);
         MatrixHelper.perspectiveM(projectionMatrix, 45, (float) width
-                / (float) height, 1f, 10f);
+                / (float) height, 0.1f, 10f);
     }
     @Override
     public void onDrawFrame(GL10 glUnused) {
         glClear(GL_COLOR_BUFFER_BIT);
-        InitialWorldParam();
-        world.renderWorld(worldShader, new Matrix4f(projectionMatrix));
-        drawSkybox();
-
-    }
-    public void drawSkybox(){
         /*
-        * TODO:
-        *       if there is camera move yaw and pitch
-        *       rotate viewProjection
-        * */
+         * TODO:
+         *       if there is camera move yaw and pitch
+         *       rotate viewProjection
+         * */
         viewMatrix = mCamera.getViewMatrix();
 
         multiplyMM(viewProjectionMatrix,0,projectionMatrix,0,viewMatrix,0);
+        drawSkybox();
+        InitialWorldParam();
+        world.renderWorld(worldShader, new Matrix4f(viewProjectionMatrix));
+
+    }
+    public void drawSkybox(){
         skyboxProgram.useProgram();
         skyboxProgram.setUniforms(viewProjectionMatrix,skyboxTexture);
         skybox.bindData(skyboxProgram);

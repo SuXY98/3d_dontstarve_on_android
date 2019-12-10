@@ -59,29 +59,28 @@ public class BaseModel {
             if(!isGenerated)
                 return;
         }
-        for(int i = 0; i < planes.size(); i++){
-            //convert data to float buffer
-            // 获取顶点着色器的位置的句柄
-            int mPositionHandler = GLES20.glGetAttribLocation(mProgram, "vPosition");
-            // 启用三角形顶点位置的句柄
-            GLES20.glEnableVertexAttribArray(mPositionHandler);
-            //准备三角形坐标数据
-            GLES20.glVertexAttribPointer(mPositionHandler, 3, GLES20.GL_FLOAT, false, 0, vertexBuffer);
-            // 获取顶点法向量句柄
-            int mNormalHandler = GLES20.glGetAttribLocation(mProgram, "normal");
-            GLES20.glEnableVertexAttribArray(mNormalHandler);
-            GLES20.glVertexAttribPointer(mNormalHandler, 3, GLES20.GL_FLOAT, true, 0, normalBuffer);
+        //convert data to float buffer
+        //testBuffer();
+        // 获取顶点着色器的位置的句柄
+        int mPositionHandler = GLES20.glGetAttribLocation(mProgram, "vPosition");
+        // 启用三角形顶点位置的句柄
+        GLES20.glEnableVertexAttribArray(mPositionHandler);
+        //准备三角形坐标数据
+        GLES20.glVertexAttribPointer(mPositionHandler, 3, GLES20.GL_FLOAT, false, 0, vertexBuffer);
+        // 获取顶点法向量句柄
+        int mNormalHandler = GLES20.glGetAttribLocation(mProgram, "normal");
+        GLES20.glEnableVertexAttribArray(mNormalHandler);
+        GLES20.glVertexAttribPointer(mNormalHandler, 3, GLES20.GL_FLOAT, true, 0, normalBuffer);
 
-            int mTextureHandler = GLES20.glGetAttribLocation(mProgram, "texture");
-            GLES20.glEnableVertexAttribArray(mTextureHandler);
-            GLES20.glVertexAttribPointer(mTextureHandler, 2, GLES20.GL_FLOAT, false, 0, textureBuffer);
+//        int mTextureHandler = GLES20.glGetAttribLocation(mProgram, "texture");
+//        GLES20.glEnableVertexAttribArray(mTextureHandler);
+//        GLES20.glVertexAttribPointer(mTextureHandler, 2, GLES20.GL_FLOAT, false, 0, textureBuffer);
 
-            GLES20.glDrawElements(GLES20.GL_TRIANGLES, planes.size() * 3, GLES20.GL_UNSIGNED_SHORT,indexBuffer);
+        GLES20.glDrawElements(GLES20.GL_TRIANGLES, planes.size() * 3, GLES20.GL_UNSIGNED_INT, indexBuffer);
 
-            GLES20.glDisableVertexAttribArray(mPositionHandler);
-            GLES20.glDisableVertexAttribArray(mNormalHandler);
-            GLES20.glDisableVertexAttribArray(mTextureHandler);
-        }
+        GLES20.glDisableVertexAttribArray(mPositionHandler);
+        GLES20.glDisableVertexAttribArray(mNormalHandler);
+//        GLES20.glDisableVertexAttribArray(mTextureHandler);
     }
 
     private void genBuffer(){
@@ -90,7 +89,7 @@ public class BaseModel {
         float [] vertexData = new float[3 * planes.size() * 3]; //vec3
         float [] normalData = new float[3 * planes.size() * 3]; //vec3
         float [] textureData = new float[3 * planes.size() * 2]; //vec2
-        int [] indexData = new int [3 * planes.size() * 3];
+        int [] indexData = new int [planes.size() * 3];
         int counter = 0;
         for(int i = 0; i < planes.size(); i++){
             //read normals, vertex and texture coordinate of each plane
@@ -110,18 +109,19 @@ public class BaseModel {
                 normalData[3 * counter + 1] = n.y;
                 normalData[3 * counter + 2] = n.z;
 
-                textureData[2 * counter    ] = vt.x;
-                textureData[2 * counter+ 1 ] = vt.y;
-
-                indexData[counter] = counter;
+                textureData[2 * counter   ] = vt.x;
+                textureData[2 * counter+ 1] = vt.y;
                 counter ++;
             }
-
+            indexData[3 * i    ] = 3 * i;
+            indexData[3 * i + 1] = 3 * i + 1;
+            indexData[3 * i + 2] = 3 * i + 2;
         }
         vertexBuffer = floatBufferUtil(vertexData);
         normalBuffer = floatBufferUtil(normalData);
         textureBuffer = floatBufferUtil(textureData);
         indexBuffer = intBufferUtil(indexData);
+        isGenerated = true;
     }
 
     private static IntBuffer intBufferUtil(int[] arr)
