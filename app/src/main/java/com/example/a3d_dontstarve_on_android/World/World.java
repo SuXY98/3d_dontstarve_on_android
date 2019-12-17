@@ -1,5 +1,6 @@
 package com.example.a3d_dontstarve_on_android.World;
 
+import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 import android.renderscript.Matrix4f;
@@ -14,11 +15,12 @@ import java.util.Vector;
 public class World {
     Vector<BaseModel> models;
     Vector<Object> objs;
-
-    public World(){
+    Context context;
+    public World(Context context){
+        this.context = context;
         objs = new Vector<>();
         models = new Vector<>();
-        models.add(new BallModel(false, 0.5f));
+        models.add(new BallModel(0.5f));
         Object object = new Object(0);
         float [] mModelView = new float[16];
         Matrix.setIdentityM(mModelView, 0);
@@ -44,6 +46,8 @@ public class World {
                 return;
             //set other options
             shader.setMaterial(models.elementAt(objs.elementAt(i).getModelID()).getK());
+            if(models.elementAt(i).hasTexture())
+                shader.setTexture(models.elementAt(i).textureID());
             //draw model
             models.elementAt(objs.elementAt(i).getModelID()).drawSelf(shader.getShaderProgramID());
         }

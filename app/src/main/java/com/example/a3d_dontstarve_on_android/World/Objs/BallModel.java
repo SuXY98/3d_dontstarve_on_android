@@ -7,8 +7,8 @@ public class BallModel extends BaseModel {
 
     private float resolution;
 
-    public BallModel(boolean hasTexture, float angleStep){
-        super(hasTexture);
+    public BallModel(float angleStep){
+        super();
         this.resolution = angleStep;
         setBallData();
     }

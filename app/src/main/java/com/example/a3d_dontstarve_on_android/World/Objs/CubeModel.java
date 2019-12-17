@@ -6,8 +6,8 @@ import com.example.a3d_dontstarve_on_android.Vector3f;
 import java.util.Vector;
 
 public class CubeModel extends BaseModel {
-    public CubeModel(boolean hasTexture){
-        super(hasTexture);
+    public CubeModel(){
+        super();
 
         this.normals = new Vector<Vector3f>(){{
             add(new Vector3f(1, 0, 0));

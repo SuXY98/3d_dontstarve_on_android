@@ -36,15 +36,15 @@ public class BaseModel {
     }
     private boolean textureFlag;
     private boolean isGenerated;
+    private int tID;
     protected Vector<RenderPoints []> planes;
     public boolean hasTexture() {
-        return textureFlag;
+        return textureFlag && openTexture;
     }
-
-    public BaseModel(boolean hasTexture){
-        this.textureFlag = hasTexture;
+    public int textureID(){return tID;}
+    public BaseModel(){
         this.isGenerated = false;
-
+        this.openTexture = true;
         //Ka, Ks, Kd
         this.K = new Vector3f[MaterialSize];
         this.points = new Vector<>();
@@ -155,4 +155,17 @@ public class BaseModel {
     public Vector3f[] getK() {
         return K;
     }
+
+    public void setTextureID(int textureID) {
+        this.tID = textureID;
+        this.textureFlag = true;
+    }
+
+    public void setK(Vector3f [] K){
+        if(K.length != 3)
+            return;
+        this.K = K;
+    }
+
+    public boolean openTexture;
 }

@@ -3,22 +3,28 @@ uniform vec3 camera;
 uniform vec3 vKa;
 uniform vec3 vKd;
 uniform vec3 vKs;
+uniform mat4 vMatrix;
+uniform vec4 aColor;
+uniform int hasTexture;
 
-attribute vec3 normal;
-//attribute vec2 texture;
-//
-//varying vec2 tCoord;
+
+
+varying vec2 tCoord;
 varying vec4 vDiffuse;          //片元着色器散射光
 varying vec4 vAmbient;          //片元着色器环境光
 varying vec4 vSpecular;          //片元着色器镜面光
+varying vec4 vColor;
 
 attribute vec3 vPosition;
-uniform mat4 vMatrix;
-varying  vec4 vColor;
-uniform vec4 aColor;
+attribute vec3 normal;
+attribute vec2 textureCoord;
+
 void main() {
   gl_Position = vMatrix * vec4(vPosition,1);
   vColor=aColor;
+  if(hasTexture == 1){
+    tCoord=textureCoord;
+  }
   float shininess=10.0;             //粗糙度，越小越光滑
 
   vec3 newNormal=normalize((vMatrix*vec4(normal+vPosition,1)).xyz-(vMatrix*vec4(vPosition,1)).xyz);

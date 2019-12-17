@@ -77,7 +77,7 @@ public class MyRenderer implements GLSurfaceView.Renderer {
         mCamera = new Camera();
         mCamera.set(0,0f,0,0.5f,0,0,0,1,0);
         worldShader = new WorldShaderProgram(context);
-        world = new World();
+        world = new World(context);
         lightLocation = new Vector3f(2, 2, -2);
     }
     @Override
