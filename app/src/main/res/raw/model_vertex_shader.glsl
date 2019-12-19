@@ -22,9 +22,9 @@ attribute vec2 textureCoord;
 void main() {
   gl_Position = vMatrix * vec4(vPosition,1);
   vColor=aColor;
-  if(hasTexture == 1){
-    tCoord=textureCoord;
-  }
+//  if(hasTexture == 1){
+//    tCoord=textureCoord;
+//  }
   float shininess=10.0;             //粗糙度，越小越光滑
 
   vec3 newNormal=normalize((vMatrix*vec4(normal+vPosition,1)).xyz-(vMatrix*vec4(vPosition,1)).xyz);
