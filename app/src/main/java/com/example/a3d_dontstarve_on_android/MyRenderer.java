@@ -26,6 +26,7 @@ import static javax.microedition.khronos.opengles.GL10.GL_ONE_MINUS_SRC_ALPHA;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import com.example.a3d_dontstarve_on_android.Character.Pikachu;
 import com.example.a3d_dontstarve_on_android.Interface.ArrowButton;
 import com.example.a3d_dontstarve_on_android.Skybox.SkyboxShaderProgram;
 import com.example.a3d_dontstarve_on_android.Skybox.Skybox;
@@ -72,6 +73,8 @@ public class MyRenderer implements GLSurfaceView.Renderer {
     public float arrowButtonCentreY;
     public float arrowButtonR2;
 
+    private Pikachu pikachu;
+
     public MyRenderer(Context context){
         this.context = context;
     }
@@ -85,11 +88,13 @@ public class MyRenderer implements GLSurfaceView.Renderer {
         skybox = new Skybox();
 
         mCamera = new Camera();
-        mCamera.set(0,0f,0,0.5f,0,0,0,1,0);
+        mCamera.set(0,0.5f,-1.0f,0,0.5f,0,0,1,0);
         worldShader = new WorldShaderProgram(context);world = new World(context);
         lightLocation = new Vector3f(2, 2, -2);
         moveDirection = 0;
-        moveSpeed = 0.01f;
+        moveSpeed = 0.02f;
+
+        pikachu = new Pikachu(this.context);
     }
     @Override
     public void onSurfaceChanged(GL10 glUnused, int width, int height) {
@@ -130,7 +135,9 @@ public class MyRenderer implements GLSurfaceView.Renderer {
         glEnable(GLES20.GL_DEPTH_TEST);
 
         InitialWorldParam();
-        world.renderWorld(worldShader, new Matrix4f(viewProjectionMatrix));
+        //world.renderWorld(worldShader, new Matrix4f(viewProjectionMatrix));
+        pikachu.draw(viewProjectionMatrix);
+
         glDisable(GL_DEPTH_TEST);
 
         drawArrowBottons();

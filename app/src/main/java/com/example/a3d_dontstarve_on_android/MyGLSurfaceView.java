@@ -48,7 +48,6 @@ public class MyGLSurfaceView extends GLSurfaceView {
                         mRenderer.moveDirection = 4;
                     }
                 }
-                System.out.println(mRenderer.moveDirection);
                 requestRender();
                 break;
             case MotionEvent.ACTION_MOVE:
