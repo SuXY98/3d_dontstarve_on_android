@@ -185,4 +185,8 @@ public class Camera {
     public Vector3f getUpVector() {
         return this.up;
     }
+
+    public Vector3f getN(){
+        return n;
+    }
 }
