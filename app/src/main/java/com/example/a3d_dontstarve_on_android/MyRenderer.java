@@ -51,8 +51,6 @@ public class MyRenderer implements GLSurfaceView.Renderer {
     private WorldShaderProgram worldShader;
     private World world;
 
-    private int skyboxTexture;
-
     public Camera mCamera;
     private ArrowButton arrowButton;
 
@@ -70,14 +68,10 @@ public class MyRenderer implements GLSurfaceView.Renderer {
 
         skyboxProgram = new SkyboxShaderProgram(context);
         skybox = new Skybox();
-        skyboxTexture = TextureHelper.loadCubeMap(context,
-                new int []{R.drawable.left, R.drawable.right,
-                    R.drawable.bottom, R.drawable.top,
-                    R.drawable.front, R.drawable.back});
+
         mCamera = new Camera();
         mCamera.set(0,0f,0,0.5f,0,0,0,1,0);
-        worldShader = new WorldShaderProgram(context);
-        world = new World(context);
+        worldShader = new WorldShaderProgram(context);world = new World(context);
         lightLocation = new Vector3f(2, 2, -2);
     }
     @Override
@@ -102,6 +96,7 @@ public class MyRenderer implements GLSurfaceView.Renderer {
         multiplyMM(viewProjectionMatrix,0,projectionMatrix,0,viewMatrix,0);
 
         drawSkybox();
+
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
         InitialWorldParam();
         world.renderWorld(worldShader, new Matrix4f(viewProjectionMatrix));
@@ -109,7 +104,7 @@ public class MyRenderer implements GLSurfaceView.Renderer {
     }
     public void drawSkybox(){
         skyboxProgram.useProgram();
-        skyboxProgram.setUniforms(viewProjectionMatrix,skyboxTexture);
+        skyboxProgram.setUniforms(viewMatrix,projectionMatrix);
         skybox.bindData(skyboxProgram);
         skybox.draw();
     }

@@ -5,7 +5,7 @@ uniform vec3 vKd;
 uniform vec3 vKs;
 uniform mat4 vMatrix;
 uniform vec4 aColor;
-uniform int hasTexture;
+//uniform int hasTexture;
 
 
 
