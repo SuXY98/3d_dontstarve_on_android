@@ -18,6 +18,7 @@ import static android.opengl.GLES20.glDisable;
 import static android.opengl.GLES20.glEnable;
 import static android.opengl.GLES20.glViewport;
 import static android.opengl.Matrix.multiplyMM;
+import static android.opengl.Matrix.perspectiveM;
 import static android.opengl.Matrix.rotateM;
 import static android.opengl.Matrix.setIdentityM;
 import static android.opengl.Matrix.translateM;
@@ -27,6 +28,8 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import com.example.a3d_dontstarve_on_android.Character.Pikachu;
+import com.example.a3d_dontstarve_on_android.BoardImg.BoardImg;
+import com.example.a3d_dontstarve_on_android.BoardImg.BoardImgShader;
 import com.example.a3d_dontstarve_on_android.Interface.ArrowButton;
 import com.example.a3d_dontstarve_on_android.Skybox.SkyboxShaderProgram;
 import com.example.a3d_dontstarve_on_android.Skybox.Skybox;
@@ -56,6 +59,15 @@ public class MyRenderer implements GLSurfaceView.Renderer {
     private SkyboxShaderProgram skyboxProgram;
     private Skybox skybox;
 
+    private BoardImg boardImg;
+    private BoardImgShader boardImgShader;
+    private float[] boarimgMMatrix = new float[]{
+            1,0,0,0,
+            0,1,0,0,
+            0,0,1,0,
+            0,0,0,1
+    };
+
     private WorldShaderProgram worldShader;
     private World world;
 
@@ -81,20 +93,24 @@ public class MyRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
 
-        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         arrowButton = new ArrowButton(context);
 
         skyboxProgram = new SkyboxShaderProgram(context);
         skybox = new Skybox();
+        //todo:一张贴纸显示怪物，还需要做一个怪物（或资源）的管理类
+        boardImgShader = new BoardImgShader(context,R.drawable.monster_wolf);
+        boardImg = new BoardImg();
 
         mCamera = new Camera();
         mCamera.set(0,0.5f,-1.0f,0,0.5f,0,0,1,0);
         worldShader = new WorldShaderProgram(context);world = new World(context);
         lightLocation = new Vector3f(2, 2, -2);
         moveDirection = 0;
-        moveSpeed = 0.02f;
 
         pikachu = new Pikachu(this.context);
+        moveSpeed = 0.1f;
+
     }
     @Override
     public void onSurfaceChanged(GL10 glUnused, int width, int height) {
@@ -105,7 +121,7 @@ public class MyRenderer implements GLSurfaceView.Renderer {
         // Set the OpenGL viewport to fill the entire surface.
         glViewport(0,0,width,height);
         MatrixHelper.perspectiveM(projectionMatrix, 45, (float) width
-                / (float) height, 0.1f, 10f);
+                / (float) height, 0.1f, 200f);
     }
     @Override
     public void onDrawFrame(GL10 glUnused) {
@@ -131,6 +147,7 @@ public class MyRenderer implements GLSurfaceView.Renderer {
         multiplyMM(viewProjectionMatrix,0,projectionMatrix,0,viewMatrix,0);
 
         drawSkybox();
+        drawBoardImg();
 
         glEnable(GLES20.GL_DEPTH_TEST);
 
@@ -142,7 +159,14 @@ public class MyRenderer implements GLSurfaceView.Renderer {
 
         drawArrowBottons();
     }
-    public void drawSkybox(){
+
+    private void drawBoardImg(){
+        boardImgShader.useProgram();
+        boardImgShader.setUniforms(viewMatrix,projectionMatrix,boarimgMMatrix,mCamera.getN(),boardImg.boardPos);
+        boardImg.draw(boardImgShader);
+    }
+
+    private void drawSkybox(){
         skyboxProgram.useProgram();
         skyboxProgram.setUniforms(viewMatrix,projectionMatrix);
         skybox.bindData(skyboxProgram);
