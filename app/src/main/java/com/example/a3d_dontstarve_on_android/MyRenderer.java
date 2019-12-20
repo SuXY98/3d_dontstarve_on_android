@@ -3,18 +3,25 @@ package com.example.a3d_dontstarve_on_android;
 import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
+import android.opengl.Matrix;
 import android.renderscript.Matrix4f;
 
+import static android.opengl.GLES20.GL_BLEND;
 import static android.opengl.GLES20.GL_DEPTH_TEST;
+import static android.opengl.GLES20.GL_ONE;
+import static android.opengl.GLES20.GL_SRC_ALPHA;
+import static android.opengl.GLES20.glBlendFunc;
 import static android.opengl.GLES20.glClear;
 import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
 import static android.opengl.GLES20.glClearColor;
 import static android.opengl.GLES20.glDisable;
+import static android.opengl.GLES20.glEnable;
 import static android.opengl.GLES20.glViewport;
 import static android.opengl.Matrix.multiplyMM;
 import static android.opengl.Matrix.rotateM;
 import static android.opengl.Matrix.setIdentityM;
 import static android.opengl.Matrix.translateM;
+import static javax.microedition.khronos.opengles.GL10.GL_ONE_MINUS_SRC_ALPHA;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -56,8 +63,16 @@ public class MyRenderer implements GLSurfaceView.Renderer {
     public Camera mCamera;
     private ArrowButton arrowButton;
 
-    private int wWidth;
-    private int wHeight;
+    public int wWidth;
+    public int wHeight;
+    public float wRation;
+    public int moveDirection;
+    private float moveSpeed;
+    private float mMiddleX;
+    private float mMiddleY;
+    public float arrowButtonCentreX;
+    public float arrowButtonCentreY;
+    public float arrowButtonR2;
 
     public MyRenderer(Context context){
         this.context = context;
@@ -79,11 +94,15 @@ public class MyRenderer implements GLSurfaceView.Renderer {
         worldShader = new WorldShaderProgram(context);
         world = new World(context);
         lightLocation = new Vector3f(2, 2, -2);
+        moveDirection = 0;
+        moveSpeed = 0.01f;
     }
     @Override
     public void onSurfaceChanged(GL10 glUnused, int width, int height) {
         wWidth = width;
         wHeight = height;
+        wRation = (float) width / (float) height;
+        changeInterfaceParas();
         // Set the OpenGL viewport to fill the entire surface.
         glViewport(0,0,width,height);
         MatrixHelper.perspectiveM(projectionMatrix, 45, (float) width
@@ -91,6 +110,17 @@ public class MyRenderer implements GLSurfaceView.Renderer {
     }
     @Override
     public void onDrawFrame(GL10 glUnused) {
+        if (moveDirection == 1) {
+            mCamera.moveVector(mCamera.n.x*moveSpeed, 0, mCamera.n.z*moveSpeed);
+        } else if (moveDirection == 2) {
+            mCamera.moveVector(-mCamera.n.z*moveSpeed, 0, mCamera.n.x*moveSpeed);
+        } else if (moveDirection == 3) {
+            mCamera.moveVector(-mCamera.n.x*moveSpeed, 0, -mCamera.n.z*moveSpeed);
+        } else if (moveDirection == 4) {
+            mCamera.moveVector(mCamera.n.z*moveSpeed, 0, -mCamera.n.x*moveSpeed);
+        }
+
+        glViewport(0,0,wWidth,wHeight);
         glClear(GL_COLOR_BUFFER_BIT);
 
         /*
@@ -102,10 +132,12 @@ public class MyRenderer implements GLSurfaceView.Renderer {
         multiplyMM(viewProjectionMatrix,0,projectionMatrix,0,viewMatrix,0);
 
         drawSkybox();
-        GLES20.glEnable(GLES20.GL_DEPTH_TEST);
+        glEnable(GLES20.GL_DEPTH_TEST);
         InitialWorldParam();
         world.renderWorld(worldShader, new Matrix4f(viewProjectionMatrix));
         glDisable(GL_DEPTH_TEST);
+
+        drawArrowBottons();
     }
     public void drawSkybox(){
         skyboxProgram.useProgram();
@@ -117,5 +149,53 @@ public class MyRenderer implements GLSurfaceView.Renderer {
         glClear(GLES20.GL_DEPTH_BUFFER_BIT);
         worldShader.useProgram();
         worldShader.setLightModel(lightLocation, mCamera.getPosition());
+    }
+
+    private void drawArrowBottons() {
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_ONE, GL_ONE);
+        glViewport(0,0,wWidth,wHeight);
+
+        float[] tempProjection = new float[16];
+        float[] mMatrixCurrent=identMat.clone();
+        Matrix.translateM(mMatrixCurrent, 0, -0.75f * wRation, -0.55f, 0.0f);
+        Matrix.scaleM(mMatrixCurrent, 0, 0.3f, 0.3f, 0.3f);
+        Matrix.orthoM(tempProjection,0,- wRation,wRation,-1.0f,1.0f,100,-100);
+        Matrix.multiplyMM(mMatrixCurrent,0,tempProjection,0,mMatrixCurrent,0);
+        arrowButton.draw(mMatrixCurrent);
+
+        mMatrixCurrent=identMat.clone();
+        Matrix.rotateM(mMatrixCurrent, 0, 90, 0, 0, 1);
+        Matrix.translateM(mMatrixCurrent, 0, -0.55f, 0.75f * wRation, 0.0f);
+        Matrix.scaleM(mMatrixCurrent, 0, 0.3f, 0.3f, 0.3f);
+        Matrix.orthoM(tempProjection,0,- wRation,wRation,-1.0f,1.0f,100,-100);
+        Matrix.multiplyMM(mMatrixCurrent,0,tempProjection,0,mMatrixCurrent,0);
+        arrowButton.draw(mMatrixCurrent);
+
+        mMatrixCurrent=identMat.clone();
+        Matrix.rotateM(mMatrixCurrent, 0, 180, 0, 0, 1);
+        Matrix.translateM(mMatrixCurrent, 0, 0.75f * wRation, 0.55f, 0.0f);
+        Matrix.scaleM(mMatrixCurrent, 0, 0.3f, 0.3f, 0.3f);
+        Matrix.orthoM(tempProjection,0,- wRation,wRation,-1.0f,1.0f,100,-100);
+        Matrix.multiplyMM(mMatrixCurrent,0,tempProjection,0,mMatrixCurrent,0);
+        arrowButton.draw(mMatrixCurrent);
+
+        mMatrixCurrent=identMat.clone();
+        Matrix.rotateM(mMatrixCurrent, 0, 270, 0, 0, 1);
+        Matrix.translateM(mMatrixCurrent, 0, 0.55f, -0.75f * wRation, 0.0f);
+        Matrix.scaleM(mMatrixCurrent, 0, 0.3f, 0.3f, 0.3f);
+        Matrix.orthoM(tempProjection,0,- wRation,wRation,-1.0f,1.0f,100,-100);
+        Matrix.multiplyMM(mMatrixCurrent,0,tempProjection,0,mMatrixCurrent,0);
+        arrowButton.draw(mMatrixCurrent);
+
+        glDisable(GL_BLEND);
+    }
+
+    void changeInterfaceParas() {
+        mMiddleX = (float)wWidth/2;
+        mMiddleY = (float)wHeight/2;
+        arrowButtonCentreX = (float)0.25*mMiddleX;
+        arrowButtonCentreY = (float)1.55*mMiddleY;
+        arrowButtonR2 = (float)0.39*mMiddleY*(float)0.39*mMiddleY;
     }
 }

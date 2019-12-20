@@ -6,7 +6,7 @@ public class Camera {
     private Vector3f position;
     private Vector3f view;
     private Vector3f up;
-    private Vector3f n;
+    public Vector3f n;
     private Vector3f v;
     private Vector3f u;
     private float[] mViewMatrix;

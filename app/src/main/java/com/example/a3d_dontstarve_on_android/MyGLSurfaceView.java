@@ -11,6 +11,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
     private float mPreviousY;
     private long lastTouch;
 
+
     public MyGLSurfaceView(Context context) {
         super(context);
         setEGLContextClientVersion(2);
@@ -32,7 +33,28 @@ public class MyGLSurfaceView extends GLSurfaceView {
         float x = e.getX();
         float y = e.getY();
         switch (e.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                if ((x-mRenderer.arrowButtonCentreX)*(x-mRenderer.arrowButtonCentreX)+(y-mRenderer.arrowButtonCentreY)*(y-mRenderer.arrowButtonCentreY) < mRenderer.arrowButtonR2) {
+                    if (y-mRenderer.arrowButtonCentreY > Math.abs(x-mRenderer.arrowButtonCentreX)) {
+                        mRenderer.moveDirection = 3;
+                    }
+                    else if (-y+mRenderer.arrowButtonCentreY > Math.abs(x-mRenderer.arrowButtonCentreX)) {
+                        mRenderer.moveDirection = 1;
+                    }
+                    else if (x-mRenderer.arrowButtonCentreX > Math.abs(y-mRenderer.arrowButtonCentreY)) {
+                        mRenderer.moveDirection = 2;
+                    }
+                    else if (-x+mRenderer.arrowButtonCentreX > Math.abs(y-mRenderer.arrowButtonCentreY)) {
+                        mRenderer.moveDirection = 4;
+                    }
+                }
+                System.out.println(mRenderer.moveDirection);
+                requestRender();
+                break;
             case MotionEvent.ACTION_MOVE:
+                if (mRenderer.moveDirection != 0) {
+                    break;
+                }
                 float dx = x - mPreviousX; // 从左往有滑动时: x 值增大，dx 为正；反之则否。
                 float dy = y - mPreviousY; // 从上往下滑动时: y 值增大，dy 为正；反之则否。
                 // OpenGL 绕 z 轴的旋转符合左手定则，即 z 轴朝屏幕里面为正。
@@ -41,14 +63,15 @@ public class MyGLSurfaceView extends GLSurfaceView {
                 // 在计算旋转角度后，调用requestRender()来告诉渲染器现在可以进行渲染了
                 requestRender();
                 break;
-//            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_UP:
+                mRenderer.moveDirection = 0;
 //                final long now = System.currentTimeMillis();
 //                if (now-lastTouch<300) {
 //                    mRenderer.changeProjection();
 //                }
 //                lastTouch = now;
-//                requestRender();
-//                break;
+                requestRender();
+                break;
         }
 
         mPreviousX = x;
