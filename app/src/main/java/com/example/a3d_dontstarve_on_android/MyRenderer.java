@@ -33,6 +33,8 @@ import com.example.a3d_dontstarve_on_android.BoardImg.BoardImgShader;
 import com.example.a3d_dontstarve_on_android.Interface.ArrowButton;
 import com.example.a3d_dontstarve_on_android.Skybox.SkyboxShaderProgram;
 import com.example.a3d_dontstarve_on_android.Skybox.Skybox;
+import com.example.a3d_dontstarve_on_android.Terrain.Terrain;
+import com.example.a3d_dontstarve_on_android.Terrain.TerrainShader;
 import com.example.a3d_dontstarve_on_android.World.World;
 import com.example.a3d_dontstarve_on_android.World.WorldShaderProgram;
 
@@ -62,6 +64,15 @@ public class MyRenderer implements GLSurfaceView.Renderer {
     private BoardImg boardImg;
     private BoardImgShader boardImgShader;
     private float[] boarimgMMatrix = new float[]{
+            1,0,0,0,
+            0,1,0,0,
+            0,0,1,0,
+            0,0,0,1
+    };
+
+    private Terrain terrain;
+    private TerrainShader terrainShader;
+    private float[] terrainMMatrix = new float[]{
             1,0,0,0,
             0,1,0,0,
             0,0,1,0,
@@ -101,6 +112,9 @@ public class MyRenderer implements GLSurfaceView.Renderer {
         //todo:一张贴纸显示怪物，还需要做一个怪物（或资源）的管理类
         boardImgShader = new BoardImgShader(context,R.drawable.monster_wolf);
         boardImg = new BoardImg();
+        //todo: 在地形上构造一个NURBS曲面山
+        terrainShader = new TerrainShader(context,R.drawable.grass);
+        terrain = new Terrain();
 
         mCamera = new Camera();
         mCamera.set(0,0.5f,-1.0f,0,0.5f,0,0,1,0);
@@ -148,6 +162,7 @@ public class MyRenderer implements GLSurfaceView.Renderer {
 
         drawSkybox();
         drawBoardImg();
+        drawTerrain();
 
         glEnable(GLES20.GL_DEPTH_TEST);
 
@@ -158,6 +173,12 @@ public class MyRenderer implements GLSurfaceView.Renderer {
         glDisable(GL_DEPTH_TEST);
 
         drawArrowBottons();
+    }
+
+    private void drawTerrain(){
+        terrainShader.useProgram();
+        terrainShader.setUniforms(viewMatrix,projectionMatrix,terrainMMatrix);
+        terrain.draw(terrainShader);
     }
 
     private void drawBoardImg(){
