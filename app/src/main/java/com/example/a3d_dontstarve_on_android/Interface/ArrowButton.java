@@ -15,20 +15,20 @@ public class ArrowButton {
     private static final int POSITION_COMPONENT_COUNT = 3;
     private final ByteBuffer indexArray;
     private final VertexAarray vertexAarray;
-    private float color[] = {1.0f, 1.0f, 1.0f, 1.0f};
+    private float color[] = {0.5f, 0.5f, 0.5f, 1.0f};
     private ArrowBottonShaderProgram mProgram;
 
     public ArrowButton(Context context) {
         mProgram = new ArrowBottonShaderProgram(context);
         // Create a unit cube.
         vertexAarray = new VertexAarray(new float[]{
-                -0.5f,  0.0f,  0.0f,
-                0.0f,  0.5f,  0.0f,
-                0.0f, -0.5f,  0.0f,
-                0.0f, 0.3f,  0.0f,
-                0.0f, -0.3f,  0.0f,
-                0.5f, -0.3f,  0.0f,
-                0.5f, 0.3f,  0.0f,
+                -1.3f,  0.0f,  0.0f,
+                -0.8f,  0.5f,  0.0f,
+                -0.8f, -0.5f,  0.0f,
+                -0.8f, 0.3f,  0.0f,
+                -0.8f, -0.3f,  0.0f,
+                -0.3f, -0.3f,  0.0f,
+                -0.3f, 0.3f,  0.0f,
         });
 
         // 6 indices per cube side
