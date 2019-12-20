@@ -43,6 +43,7 @@ public class SkyboxShaderProgram extends ShaderProgram {
     public void setUniforms(float[] vmatrix,float[] pmatrix) {
         processSkyboxT(vmatrix);
         multiplyMM(vieproMatrix,0,pmatrix,0,skyboxViewMatric,0);
+
         glUniformMatrix4fv(uMatrixLocation, 1, false,vieproMatrix, 0);
 
         glActiveTexture(GL_TEXTURE0);
@@ -57,7 +58,11 @@ public class SkyboxShaderProgram extends ShaderProgram {
         skyboxViewMatric[3] = 0;
         skyboxViewMatric[7] = 0;
         skyboxViewMatric[11] = 0;
+        skyboxViewMatric[12] = 0;
+        skyboxViewMatric[13] = 0;
+        skyboxViewMatric[14] = 0;
         skyboxViewMatric[15] = 0;
+        //System.out.print(skyboxViewMatric[3]);
     }
 
     public int getPositionAttributeLocation() {
