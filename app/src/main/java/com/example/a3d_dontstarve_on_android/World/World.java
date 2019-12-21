@@ -33,7 +33,11 @@ public class World {
         objs.add(object);
     }
 
-    public void renderWorld(WorldShaderProgram shader, Matrix4f projection){
+    public void renderWorld(WorldShaderProgram shader, Matrix4f projection) {
+        if(shader.isFail()){
+            System.out.println("Shader is Broken, render world exit...\n");
+            return;
+        }
         // 获取片段着色器的颜色的句柄
         int mColorHandler = GLES20.glGetUniformLocation(shader.getShaderProgramID(), "aColor");
         // 设置绘制三角形的颜色
@@ -49,7 +53,11 @@ public class World {
             if(models.elementAt(i).hasTexture())
                 shader.setTexture(models.elementAt(i).textureID());
             //draw model
-            models.elementAt(objs.elementAt(i).getModelID()).drawSelf(shader.getShaderProgramID());
+            try {
+                models.elementAt(objs.elementAt(i).getModelID()).drawSelf(shader.getShaderProgramID());
+            }catch(Exception e){
+                System.out.println(e.getMessage());
+            }
         }
     }
 }

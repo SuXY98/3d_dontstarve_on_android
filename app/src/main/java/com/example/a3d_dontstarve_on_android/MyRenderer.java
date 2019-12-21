@@ -167,7 +167,7 @@ public class MyRenderer implements GLSurfaceView.Renderer {
         glEnable(GLES20.GL_DEPTH_TEST);
 
         InitialWorldParam();
-        //world.renderWorld(worldShader, new Matrix4f(viewProjectionMatrix));
+        world.renderWorld(worldShader, new Matrix4f(viewProjectionMatrix));
         pikachu.draw(viewProjectionMatrix);
 
         glDisable(GL_DEPTH_TEST);

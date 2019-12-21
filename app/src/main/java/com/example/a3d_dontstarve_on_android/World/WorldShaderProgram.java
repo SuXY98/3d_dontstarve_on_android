@@ -31,7 +31,10 @@ public class WorldShaderProgram extends ShaderProgram {
     public WorldShaderProgram(Context context){
         super(context, R.raw.model_vertex_shader,
                 R.raw.model_fragment_shader);
-
+        if(program == 0){
+            //build fail
+            return;
+        }
         mMatrix = glGetUniformLocation(program, "vMatrix");
         mTexture = glGetUniformLocation(program, "vTexture");
 
@@ -50,7 +53,6 @@ public class WorldShaderProgram extends ShaderProgram {
                 0, 0, 0, 1
         };
         glUniformMatrix4fv(mMatrix, 1, false, ident, 0);
-
     }
 
     public int getShaderProgramID(){
@@ -86,5 +88,9 @@ public class WorldShaderProgram extends ShaderProgram {
         glUniform1i(mTexture, 0);
         glUniform1i(hasTexture, 1);
         return true;
+    }
+
+    public boolean isFail(){
+        return program == 0;
     }
 }

@@ -1,6 +1,9 @@
 package com.example.a3d_dontstarve_on_android.World.Objs;
 
 import android.opengl.GLES20;
+
+import com.example.a3d_dontstarve_on_android.Character.MtlInfo;
+import com.example.a3d_dontstarve_on_android.Character.Obj3D;
 import com.example.a3d_dontstarve_on_android.Vector2f;
 import com.example.a3d_dontstarve_on_android.Vector3f;
 
@@ -21,7 +24,7 @@ public class BaseModel {
     private FloatBuffer vertexBuffer;
     private FloatBuffer normalBuffer;
     private FloatBuffer textureBuffer;
-
+    private int mProgram;
     private static final int indexLength = 3;
     protected class RenderPoints{
         public int pointIndex;
@@ -37,6 +40,7 @@ public class BaseModel {
     private boolean textureFlag;
     private boolean isGenerated;
     private int tID;
+    public boolean openTexture;
     protected Vector<RenderPoints []> planes;
     public boolean hasTexture() {
         return textureFlag && openTexture;
@@ -55,34 +59,44 @@ public class BaseModel {
         K[0] = new Vector3f(0.2f, 0.2f, 0.2f);
         K[1] = new Vector3f(0f, 0f, 0f);
     }
-    //other features not support yet
+
+    private int getHandlerLocation(String name) throws Exception{
+        int id = GLES20.glGetAttribLocation(mProgram, name);
+        if(id < 0)
+            throw new Exception("Get Location fails!");
+        return id;
+    }
+
     //property of specific objects not saved in this class
-    public void drawSelf(int mProgram){
+    //before call this function, all uniform parameter must called
+    public void drawSelf(int mProgram) throws Exception {
+        this.mProgram = mProgram;
         if(!isGenerated){
             genBuffer();
             if(!isGenerated)
                 return;
         }
+
         // 获取顶点着色器的位置的句柄
-        int mPositionHandler = GLES20.glGetAttribLocation(mProgram, "vPosition");
+        int mPositionHandler = getHandlerLocation("vPosition");
+        int mNormalHandler = getHandlerLocation("normal");
+        int mTextureHandler = getHandlerLocation("textureCoord");
         // 启用三角形顶点位置的句柄
         GLES20.glEnableVertexAttribArray(mPositionHandler);
         //准备三角形坐标数据
         GLES20.glVertexAttribPointer(mPositionHandler, 3, GLES20.GL_FLOAT, false, 0, vertexBuffer);
         // 获取顶点法向量句柄
-        int mNormalHandler = GLES20.glGetAttribLocation(mProgram, "normal");
         GLES20.glEnableVertexAttribArray(mNormalHandler);
         GLES20.glVertexAttribPointer(mNormalHandler, 3, GLES20.GL_FLOAT, true, 0, normalBuffer);
-
-//        int mTextureHandler = GLES20.glGetAttribLocation(mProgram, "texture");
-//        GLES20.glEnableVertexAttribArray(mTextureHandler);
-//        GLES20.glVertexAttribPointer(mTextureHandler, 2, GLES20.GL_FLOAT, false, 0, textureBuffer);
-
-        GLES20.glDrawElements(GLES20.GL_TRIANGLES, planes.size() * 3, GLES20.GL_UNSIGNED_INT, indexBuffer);
-
+        if(this.hasTexture()){
+            GLES20.glEnableVertexAttribArray(mTextureHandler);
+            GLES20.glVertexAttribPointer(mTextureHandler, 2, GLES20.GL_FLOAT, false, 0, textureBuffer);
+        }
+        //GLES20.glDrawElements(GLES20.GL_TRIANGLES, planes.size() * 3, GLES20.GL_UNSIGNED_INT, indexBuffer);
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, points.size());
         GLES20.glDisableVertexAttribArray(mPositionHandler);
         GLES20.glDisableVertexAttribArray(mNormalHandler);
-//        GLES20.glDisableVertexAttribArray(mTextureHandler);
+        GLES20.glDisableVertexAttribArray(mTextureHandler);
     }
 
     private void genBuffer(){
@@ -167,5 +181,7 @@ public class BaseModel {
         this.K = K;
     }
 
-    public boolean openTexture;
+    public BaseModel(Obj3D obj3d, MtlInfo mtlInfo){
+
+    }
 }
