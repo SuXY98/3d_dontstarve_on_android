@@ -4,6 +4,7 @@ import android.content.Context;
 import android.opengl.Matrix;
 
 import com.example.a3d_dontstarve_on_android.Utils.Gl2Utils;
+import com.example.a3d_dontstarve_on_android.Vector3f;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,8 @@ import static android.opengl.Matrix.multiplyMM;
 
 public class Pikachu {
     private List<ObjFilter2> filters;
+    public Camera mCamera;
+    private float displayAngle;
 
     public Pikachu(Context context) {
         List<Obj3D> model=ObjReader.readMultiObj(context,"assets/character/pikachu.obj");
@@ -24,22 +27,34 @@ public class Pikachu {
         for (ObjFilter2 f:filters){
             f.create();
         }
+        mCamera = new Camera();
     }
 
-    public void onSurfaceChanged(int width, int height) {
-        for (ObjFilter2 f:filters){
-            float[] matrix= Gl2Utils.getOriginalMatrix();
-            Matrix.translateM(matrix,0,0,-0.3f,0);
-            Matrix.scaleM(matrix,0,0.002f,0.002f*width/height,0.002f);
-            f.setMatrix(matrix);
+    public void changeDisplayAngle(int direction) {
+        if (direction==1) {
+            displayAngle = mCamera.getYaw();
+        }
+        else if (direction==2) {
+            displayAngle = mCamera.getYaw()+90;
+        }
+        else if (direction==3) {
+            displayAngle = mCamera.getYaw()+180;
+        }
+        else if (direction==4) {
+            displayAngle = mCamera.getYaw()+270;
         }
     }
 
     public void draw(float[] VPMatrix) {
         float[] MVPMatrix = new float[16];
+        Vector3f position = mCamera.getPikachuPos();
         for (ObjFilter2 f:filters){
             float[] matrix= Gl2Utils.getOriginalMatrix();
-            Matrix.scaleM(matrix,0,0.0015f,0.0015f,0.0015f);
+            Matrix.translateM(matrix, 0, position.x, position.y, position.z);
+            //System.out.println(mCamera.getYaw());
+            Matrix.rotateM(matrix, 0, 90, 0, 1, 0);
+            Matrix.rotateM(matrix, 0, -displayAngle, 0, 1, 0);
+            Matrix.scaleM(matrix,0,0.005f,0.005f,0.005f);
             multiplyMM(MVPMatrix,0,VPMatrix,0,matrix,0);
             f.setMatrix(MVPMatrix);
             f.draw();

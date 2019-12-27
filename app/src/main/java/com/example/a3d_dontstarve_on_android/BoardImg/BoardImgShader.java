@@ -67,9 +67,9 @@ public class BoardImgShader extends ShaderProgram {
         double cos = N.dot(0,0,1);
         double angle = Math.acos(cos);
         float floatangle = (float)angle*57.29578f;
-        if(LoggerConfig.ON ){
-            Log.w(TAG," N" + N.x+N.y+N.z+"   rotate "+floatangle);
-        }
+//        if(LoggerConfig.ON ){
+//            Log.w(TAG," N" + N.x+N.y+N.z+"   rotate "+floatangle);
+//        }
         rotateM(mboardMatrix,0,mboardMatrix,0,floatangle,0,1,0);
         translateM(mboardMatrix,0,mboardMatrix,0,pos.x,pos.y,pos.z);
     }

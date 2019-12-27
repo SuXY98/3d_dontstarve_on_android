@@ -82,7 +82,6 @@ public class MyRenderer implements GLSurfaceView.Renderer {
     private WorldShaderProgram worldShader;
     private World world;
 
-    public Camera mCamera;
     private ArrowButton arrowButton;
 
     public int wWidth;
@@ -96,7 +95,7 @@ public class MyRenderer implements GLSurfaceView.Renderer {
     public float arrowButtonCentreY;
     public float arrowButtonR2;
 
-    private Pikachu pikachu;
+    public Pikachu pikachu;
 
     public MyRenderer(Context context){
         this.context = context;
@@ -116,8 +115,6 @@ public class MyRenderer implements GLSurfaceView.Renderer {
         terrainShader = new TerrainShader(context,R.drawable.grass);
         terrain = new Terrain();
 
-        mCamera = new Camera();
-        mCamera.set(0,0.5f,-1.0f,0,0.5f,0,0,1,0);
         worldShader = new WorldShaderProgram(context);world = new World(context);
         lightLocation = new Vector3f(2, 2, -2);
         moveDirection = 0;
@@ -139,14 +136,9 @@ public class MyRenderer implements GLSurfaceView.Renderer {
     }
     @Override
     public void onDrawFrame(GL10 glUnused) {
-        if (moveDirection == 1) {
-            mCamera.moveVector(mCamera.n.x*moveSpeed, 0, mCamera.n.z*moveSpeed);
-        } else if (moveDirection == 2) {
-            mCamera.moveVector(-mCamera.n.z*moveSpeed, 0, mCamera.n.x*moveSpeed);
-        } else if (moveDirection == 3) {
-            mCamera.moveVector(-mCamera.n.x*moveSpeed, 0, -mCamera.n.z*moveSpeed);
-        } else if (moveDirection == 4) {
-            mCamera.moveVector(mCamera.n.z*moveSpeed, 0, -mCamera.n.x*moveSpeed);
+        if (moveDirection>0) {
+            pikachu.mCamera.move(moveDirection, 1);
+            pikachu.changeDisplayAngle(moveDirection);
         }
 
         glViewport(0,0,wWidth,wHeight);
@@ -157,7 +149,7 @@ public class MyRenderer implements GLSurfaceView.Renderer {
          *       if there is camera move yaw and pitch
          *       rotate viewProjection
          * */
-        viewMatrix = mCamera.getViewMatrix();
+        viewMatrix = pikachu.mCamera.getViewMatrix();
         multiplyMM(viewProjectionMatrix,0,projectionMatrix,0,viewMatrix,0);
 
         drawSkybox();
@@ -167,7 +159,7 @@ public class MyRenderer implements GLSurfaceView.Renderer {
         glEnable(GLES20.GL_DEPTH_TEST);
 
         InitialWorldParam();
-        world.renderWorld(worldShader, new Matrix4f(viewProjectionMatrix));
+//        world.renderWorld(worldShader, new Matrix4f(viewProjectionMatrix));
         pikachu.draw(viewProjectionMatrix);
 
         glDisable(GL_DEPTH_TEST);
@@ -183,7 +175,7 @@ public class MyRenderer implements GLSurfaceView.Renderer {
 
     private void drawBoardImg(){
         boardImgShader.useProgram();
-        boardImgShader.setUniforms(viewMatrix,projectionMatrix,boarimgMMatrix,mCamera.getN(),boardImg.boardPos);
+        boardImgShader.setUniforms(viewMatrix,projectionMatrix,boarimgMMatrix,pikachu.mCamera.front,boardImg.boardPos);
         boardImg.draw(boardImgShader);
     }
 
@@ -196,7 +188,7 @@ public class MyRenderer implements GLSurfaceView.Renderer {
     private void InitialWorldParam(){
         glClear(GLES20.GL_DEPTH_BUFFER_BIT);
         worldShader.useProgram();
-        worldShader.setLightModel(lightLocation, mCamera.getPosition());
+        worldShader.setLightModel(lightLocation, pikachu.mCamera.position);
     }
 
     private void drawArrowBottons() {
