@@ -9,8 +9,6 @@ public class MyGLSurfaceView extends GLSurfaceView {
     public final MyRenderer mRenderer;
     private float mPreviousX;
     private float mPreviousY;
-    private long lastTouch;
-
 
     public MyGLSurfaceView(Context context) {
         super(context);
@@ -67,11 +65,6 @@ public class MyGLSurfaceView extends GLSurfaceView {
                 break;
             case MotionEvent.ACTION_UP:
                 mRenderer.moveDirection = 0;
-//                final long now = System.currentTimeMillis();
-//                if (now-lastTouch<300) {
-//                    mRenderer.changeProjection();
-//                }
-//                lastTouch = now;
                 requestRender();
                 break;
         }

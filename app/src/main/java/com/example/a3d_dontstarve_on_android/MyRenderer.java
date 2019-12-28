@@ -121,8 +121,7 @@ public class MyRenderer implements GLSurfaceView.Renderer {
 
         pikachuState = new PikachuState(this.context);
 
-        GlobalTimer.stop();
-        GlobalTimer.start();
+        GlobalTimer.initializeTimer();
     }
     @Override
     public void onSurfaceChanged(GL10 glUnused, int width, int height) {
@@ -137,10 +136,12 @@ public class MyRenderer implements GLSurfaceView.Renderer {
     }
     @Override
     public void onDrawFrame(GL10 glUnused) {
+        GlobalTimer.updateTimer();
         if (moveDirection>0) {
-            pikachu.mCamera.move(moveDirection, 1);
+            pikachu.mCamera.move(moveDirection, (float)GlobalTimer.getDeltaTime()/20);
             pikachu.changeDisplayAngle(moveDirection);
         }
+        GlobalTimer.resetLastUpdateTime();
 
         glViewport(0,0,wWidth,wHeight);
         glClear(GL_COLOR_BUFFER_BIT);
