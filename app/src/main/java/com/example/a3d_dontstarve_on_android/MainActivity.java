@@ -3,7 +3,10 @@ package com.example.a3d_dontstarve_on_android;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ActivityManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ConfigurationInfo;
 import android.opengl.GLSurfaceView;
@@ -20,8 +23,6 @@ import static java.security.AccessController.getContext;
 public class MainActivity extends AppCompatActivity {
 
     private MyGLSurfaceView mGlSurfaceView;
-    private Button btn;
-    private LinearLayout ll;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,5 +30,16 @@ public class MainActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         mGlSurfaceView = new MyGLSurfaceView(this);
         setContentView(mGlSurfaceView);
+
+        CloseActivityReceiver closeReceiver = new CloseActivityReceiver();
+        IntentFilter intentFilter = new IntentFilter("con.lcry.close.activity");
+        registerReceiver(closeReceiver, intentFilter);
+    }
+
+    public class CloseActivityReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent){
+            MainActivity.this.finish();
+        }
     }
 }

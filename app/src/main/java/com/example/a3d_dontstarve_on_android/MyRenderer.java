@@ -1,6 +1,7 @@
 package com.example.a3d_dontstarve_on_android;
 
 import android.content.Context;
+import android.content.Intent;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
@@ -14,6 +15,7 @@ import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
 import static android.opengl.GLES20.glClearColor;
 import static android.opengl.GLES20.glDisable;
 import static android.opengl.GLES20.glEnable;
+import static android.opengl.GLES20.glFinish;
 import static android.opengl.GLES20.glViewport;
 import static android.opengl.Matrix.multiplyMM;
 import static android.opengl.Matrix.rotateM;
@@ -136,6 +138,8 @@ public class MyRenderer implements GLSurfaceView.Renderer {
     }
     @Override
     public void onDrawFrame(GL10 glUnused) {
+        checkHP();
+
         GlobalTimer.updateTimer();
         if (moveDirection>0) {
             pikachu.mCamera.move(moveDirection, (float)GlobalTimer.getDeltaTime()/20);
@@ -250,5 +254,12 @@ public class MyRenderer implements GLSurfaceView.Renderer {
         arrowButtonCentreX = (float)0.25*mMiddleX;
         arrowButtonCentreY = (float)1.55*mMiddleY;
         arrowButtonR2 = (float)0.39*mMiddleY*(float)0.39*mMiddleY;
+    }
+
+    private void checkHP() {
+        if (!pikachuState.isAlive()) {
+            Intent intent=new Intent(context,GameOver.class);
+            context.startActivity(intent);
+        }
     }
 }

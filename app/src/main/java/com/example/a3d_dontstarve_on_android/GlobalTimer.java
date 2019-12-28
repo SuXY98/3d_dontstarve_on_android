@@ -6,7 +6,7 @@ import java.util.Date;
 public final class GlobalTimer {
     private static long startTime;
     private static long currentTime;
-    static final long DAYLENGTH = 120000;
+    static final long DAYLENGTH = 12000;
     private static long lastEatTime;
     private static long lastUpdateTime;
 

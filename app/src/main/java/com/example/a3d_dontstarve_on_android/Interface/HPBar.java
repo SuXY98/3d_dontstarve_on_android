@@ -10,14 +10,14 @@ import data.VertexAarray;
 import static android.opengl.GLES20.GL_UNSIGNED_BYTE;
 import static android.opengl.GLES20.glDrawElements;
 
-public class HP {
+public class HPBar {
     private static final int POSITION_COMPONENT_COUNT = 3;
     private final ByteBuffer indexArray;
     private final VertexAarray vertexAarray;
     private float color[] = {0.7f, 0.1f, 0.1f, 1.0f};
     private InterfaceShaderProgram mProgram;
 
-    public HP(Context context) {
+    public HPBar(Context context) {
         mProgram = new InterfaceShaderProgram(context);
         vertexAarray = new VertexAarray(new float[] {
                 0.3f,  0.2f,  0.0f,
