@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.opengl.Matrix.multiplyMM;
+import static com.example.a3d_dontstarve_on_android.GlobalTimer.Timer;
+import static com.example.a3d_dontstarve_on_android.GlobalTimer.getCurrentMS;
 
 public class Pikachu {
     private List<ObjFilter2> filters;
@@ -48,12 +50,13 @@ public class Pikachu {
     public void draw(float[] VPMatrix) {
         float[] MVPMatrix = new float[16];
         Vector3f position = mCamera.getPikachuPos();
+        float jumpTime = (getCurrentMS()% 900) / 5;
         for (ObjFilter2 f:filters){
             float[] matrix= Gl2Utils.getOriginalMatrix();
             Matrix.translateM(matrix, 0, position.x, position.y, position.z);
             //System.out.println(mCamera.getYaw());
-            Matrix.rotateM(matrix, 0, 90, 0, 1, 0);
-            Matrix.rotateM(matrix, 0, -displayAngle, 0, 1, 0);
+            Matrix.translateM(matrix, 0, 0, 0.3f * (float)Math.abs(Math.cos(Math.toRadians(jumpTime))), 0);
+            Matrix.rotateM(matrix, 0, 90-displayAngle, 0, 1, 0);
             Matrix.scaleM(matrix,0,0.005f,0.005f,0.005f);
             multiplyMM(MVPMatrix,0,VPMatrix,0,matrix,0);
             f.setMatrix(MVPMatrix);

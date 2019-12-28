@@ -4,12 +4,10 @@ import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
-import android.renderscript.Matrix4f;
 
 import static android.opengl.GLES20.GL_BLEND;
 import static android.opengl.GLES20.GL_DEPTH_TEST;
 import static android.opengl.GLES20.GL_ONE;
-import static android.opengl.GLES20.GL_SRC_ALPHA;
 import static android.opengl.GLES20.glBlendFunc;
 import static android.opengl.GLES20.glClear;
 import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
@@ -18,11 +16,8 @@ import static android.opengl.GLES20.glDisable;
 import static android.opengl.GLES20.glEnable;
 import static android.opengl.GLES20.glViewport;
 import static android.opengl.Matrix.multiplyMM;
-import static android.opengl.Matrix.perspectiveM;
 import static android.opengl.Matrix.rotateM;
-import static android.opengl.Matrix.setIdentityM;
 import static android.opengl.Matrix.translateM;
-import static javax.microedition.khronos.opengles.GL10.GL_ONE_MINUS_SRC_ALPHA;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -31,6 +26,7 @@ import com.example.a3d_dontstarve_on_android.Character.Pikachu;
 import com.example.a3d_dontstarve_on_android.BoardImg.BoardImg;
 import com.example.a3d_dontstarve_on_android.BoardImg.BoardImgShader;
 import com.example.a3d_dontstarve_on_android.Interface.ArrowButton;
+import com.example.a3d_dontstarve_on_android.Interface.PikachuState;
 import com.example.a3d_dontstarve_on_android.Skybox.SkyboxShaderProgram;
 import com.example.a3d_dontstarve_on_android.Skybox.Skybox;
 import com.example.a3d_dontstarve_on_android.Terrain.Terrain;
@@ -39,7 +35,6 @@ import com.example.a3d_dontstarve_on_android.World.World;
 import com.example.a3d_dontstarve_on_android.World.WorldShaderProgram;
 
 import util.MatrixHelper;
-import util.TextureHelper;
 
 /*
  *use static import to avoid long and boring thing
@@ -95,6 +90,8 @@ public class MyRenderer implements GLSurfaceView.Renderer {
     public float arrowButtonCentreY;
     public float arrowButtonR2;
 
+    private PikachuState pikachuState;
+
     public Pikachu pikachu;
 
     public MyRenderer(Context context){
@@ -122,6 +119,10 @@ public class MyRenderer implements GLSurfaceView.Renderer {
         pikachu = new Pikachu(this.context);
         moveSpeed = 0.1f;
 
+        pikachuState = new PikachuState(this.context);
+
+        GlobalTimer.stop();
+        GlobalTimer.start();
     }
     @Override
     public void onSurfaceChanged(GL10 glUnused, int width, int height) {
@@ -165,6 +166,7 @@ public class MyRenderer implements GLSurfaceView.Renderer {
         glDisable(GL_DEPTH_TEST);
 
         drawArrowBottons();
+        drawPikachuState();
     }
 
     private void drawTerrain(){
@@ -229,6 +231,16 @@ public class MyRenderer implements GLSurfaceView.Renderer {
         arrowButton.draw(mMatrixCurrent);
 
         glDisable(GL_BLEND);
+    }
+
+    private void drawPikachuState() {
+        float[] tempProjection = new float[16];
+        float[] mMatrixCurrent=identMat.clone();
+        Matrix.translateM(mMatrixCurrent, 0, 0.6f * wRation, 0.75f, 0.0f);
+        Matrix.scaleM(mMatrixCurrent, 0, 0.15f, 0.15f, 0.15f);
+        Matrix.orthoM(tempProjection,0,- wRation,wRation,-1.0f,1.0f,100,-100);
+        Matrix.multiplyMM(mMatrixCurrent,0,tempProjection,0,mMatrixCurrent,0);
+        pikachuState.draw(mMatrixCurrent);
     }
 
     void changeInterfaceParas() {

@@ -6,7 +6,7 @@ import java.util.Date;
 public final class GlobalTimer {
     private static boolean isStart;
     private static long startTime;
-    private static final Date Timer = new Date();
+    public static final Date Timer = new Date();
     public static void start(){
         if(!isStart){
             isStart = true;
@@ -19,7 +19,8 @@ public final class GlobalTimer {
     }
 
     public static long getCurrentMS(){
-        return Timer.getTime() - startTime;
+        Date T = new Date();
+        return T.getTime() - startTime;
     }
 
     public static boolean isStart(){
