@@ -24,6 +24,7 @@ public class BaseModel {
     private FloatBuffer vertexBuffer;
     private FloatBuffer normalBuffer;
     private FloatBuffer textureBuffer;
+    private float shininess;
     private int mProgram;
     private static final int indexLength = 3;
     protected class RenderPoints{
@@ -58,6 +59,7 @@ public class BaseModel {
         K[2] = new Vector3f(0.8f, 0.8f, 0.8f);
         K[0] = new Vector3f(0.2f, 0.2f, 0.2f);
         K[1] = new Vector3f(0f, 0f, 0f);
+        shininess = 10.0f;
     }
 
     private int getHandlerLocation(String name) throws Exception{
@@ -92,8 +94,8 @@ public class BaseModel {
             GLES20.glEnableVertexAttribArray(mTextureHandler);
             GLES20.glVertexAttribPointer(mTextureHandler, 2, GLES20.GL_FLOAT, false, 0, textureBuffer);
         }
-        //GLES20.glDrawElements(GLES20.GL_TRIANGLES, planes.size() * 3, GLES20.GL_UNSIGNED_INT, indexBuffer);
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, points.size());
+        GLES20.glDrawElements(GLES20.GL_TRIANGLES, planes.size() * 3, GLES20.GL_UNSIGNED_INT, indexBuffer);
+        //GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, points.size());
         GLES20.glDisableVertexAttribArray(mPositionHandler);
         GLES20.glDisableVertexAttribArray(mNormalHandler);
         GLES20.glDisableVertexAttribArray(mTextureHandler);
@@ -184,4 +186,5 @@ public class BaseModel {
     public BaseModel(Obj3D obj3d, MtlInfo mtlInfo){
 
     }
+
 }

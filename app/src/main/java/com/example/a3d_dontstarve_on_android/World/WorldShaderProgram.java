@@ -2,6 +2,7 @@ package com.example.a3d_dontstarve_on_android.World;
 
 import android.content.Context;
 import android.opengl.GLES20;
+import android.renderscript.Matrix4f;
 
 import com.example.a3d_dontstarve_on_android.R;
 import com.example.a3d_dontstarve_on_android.Vector3f;
@@ -16,18 +17,26 @@ import static android.opengl.GLES20.glGetUniformLocation;
 import static android.opengl.GLES20.glUniform1f;
 import static android.opengl.GLES20.glUniform1i;
 import static android.opengl.GLES20.glUniform3f;
+import static android.opengl.GLES20.glUniform4f;
 import static android.opengl.GLES20.glUniformMatrix4fv;
 
 public class WorldShaderProgram extends ShaderProgram {
     private int mMatrix;
+    private int vpMatrix;
     private int mTexture;
-
+    private int hasShadow;
     private int vKa;
     private int vKd;
     private int vKs;
     private int mCamera;
     private int mLight;
     private int hasTexture;
+    private int shininess;
+    private int lightColor;
+
+    public float zNear;
+    public float zFar;
+
     public WorldShaderProgram(Context context){
         super(context, R.raw.model_vertex_shader,
                 R.raw.model_fragment_shader);
@@ -35,16 +44,19 @@ public class WorldShaderProgram extends ShaderProgram {
             //build fail
             return;
         }
-        mMatrix = glGetUniformLocation(program, "vMatrix");
+        mMatrix = glGetUniformLocation(program, "mMatrix");
+        vpMatrix = glGetUniformLocation(program, "vpMatrix");
         mTexture = glGetUniformLocation(program, "vTexture");
-
+        lightColor = glGetUniformLocation(program, "lightColor");
         //光照明参数
         mLight = glGetUniformLocation(program, "lightLocation");
         mCamera = glGetUniformLocation(program, "camera");
         vKa = glGetUniformLocation(program, "vKa");
         vKs = glGetUniformLocation(program, "vKs");
-        vKd = glGetUniformLocation(program, "vKs");
+        vKd = glGetUniformLocation(program, "vKd");
         hasTexture = glGetUniformLocation(program, "hasTexture");
+        shininess =  glGetUniformLocation(program, "shininess");
+        hasShadow = glGetUniformLocation(program, "hasShadow");
         //默认设置
         float [] ident = {
                 1, 0, 0, 0,
@@ -53,22 +65,38 @@ public class WorldShaderProgram extends ShaderProgram {
                 0, 0, 0, 1
         };
         glUniformMatrix4fv(mMatrix, 1, false, ident, 0);
+        glUniformMatrix4fv(vpMatrix, 1, false, ident, 0);
+        zNear = 0.1f;
+        zFar = 10f;
     }
 
     public int getShaderProgramID(){
         return program;
     }
 
-    public boolean setModelView(float [] matrix){
+    public boolean setViewProjection(float [] matrix){
         if(matrix.length != 16)
             return false;
-        GLES20.glUniformMatrix4fv(mMatrix, 1, false, matrix, 0);
+        GLES20.glUniformMatrix4fv(vpMatrix, 1, false, matrix, 0);
         return true;
     }
 
-    public void setLightModel(Vector3f lightLoc, Vector3f camLoc){
-        glUniform3f(mLight, lightLoc.x, lightLoc.y, lightLoc.z);
+    public void setModelMatrix(Matrix4f mMat){
+        GLES20.glUniformMatrix4fv(mMatrix, 1, false, mMat.getArray(), 0);
+    }
+
+    public void setLightModel(Vector3f lightLoc, Vector3f camLoc, boolean isParallel){
+        glUniform4f(mLight, lightLoc.x, lightLoc.y, lightLoc.z, isParallel?1:-1);
         glUniform3f(mCamera, camLoc.x, camLoc.y, camLoc.z);
+    }
+
+    public void setLightColor(Vector3f lColor){
+        float [] color = new float[]{lColor.x, lColor.y, lColor.z};
+        GLES20.glUniform3fv(lightColor, 1, color, 0);
+    }
+
+    public void setShininess(float s){
+        glUniform1f(shininess, s);
     }
 
     public void setMaterial(Vector3f [] K){
@@ -83,6 +111,10 @@ public class WorldShaderProgram extends ShaderProgram {
     }
 
     public boolean setTexture(int textureID){
+        if(textureID < 0){
+            glUniform1i(hasTexture, 0);
+            return true;
+        }
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_BINDING_2D, textureID);
         glUniform1i(mTexture, 0);
@@ -90,7 +122,14 @@ public class WorldShaderProgram extends ShaderProgram {
         return true;
     }
 
+
     public boolean isFail(){
         return program == 0;
     }
+
+    public void setShadow(boolean state){
+        glUniform1i(hasShadow, state?1:0);
+    }
+
+
 }

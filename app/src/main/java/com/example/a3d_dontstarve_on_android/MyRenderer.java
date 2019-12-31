@@ -119,7 +119,7 @@ public class MyRenderer implements GLSurfaceView.Renderer {
         mCamera = new Camera();
         mCamera.set(0,0.5f,-1.0f,0,0.5f,0,0,1,0);
         worldShader = new WorldShaderProgram(context);world = new World(context);
-        lightLocation = new Vector3f(2, 2, -2);
+        lightLocation = new Vector3f(0, -10, -10);
         moveDirection = 0;
 
         pikachu = new Pikachu(this.context);
@@ -167,7 +167,7 @@ public class MyRenderer implements GLSurfaceView.Renderer {
         glEnable(GLES20.GL_DEPTH_TEST);
 
         InitialWorldParam();
-        world.renderWorld(worldShader, new Matrix4f(viewProjectionMatrix));
+        world.renderWorld(worldShader, viewProjectionMatrix);
         pikachu.draw(viewProjectionMatrix);
 
         glDisable(GL_DEPTH_TEST);
@@ -196,7 +196,9 @@ public class MyRenderer implements GLSurfaceView.Renderer {
     private void InitialWorldParam(){
         glClear(GLES20.GL_DEPTH_BUFFER_BIT);
         worldShader.useProgram();
-        worldShader.setLightModel(lightLocation, mCamera.getPosition());
+        worldShader.setLightModel(lightLocation, mCamera.getPosition(), true);
+        worldShader.setShininess(32);
+        worldShader.setLightColor(new Vector3f(1,1,1));
     }
 
     private void drawArrowBottons() {
