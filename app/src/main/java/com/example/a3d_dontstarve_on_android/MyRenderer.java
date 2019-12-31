@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
+import android.renderscript.Matrix4f;
 
 import static android.opengl.GLES20.GL_BLEND;
 import static android.opengl.GLES20.GL_DEPTH_TEST;
@@ -167,7 +168,7 @@ public class MyRenderer implements GLSurfaceView.Renderer {
         glEnable(GLES20.GL_DEPTH_TEST);
 
         InitialWorldParam();
-//        world.renderWorld(worldShader, new Matrix4f(viewProjectionMatrix));
+        world.renderWorld(worldShader, viewProjectionMatrix);
         pikachu.draw(viewProjectionMatrix);
         monster.draw(viewProjectionMatrix);
         fruit.draw(viewProjectionMatrix);
@@ -193,7 +194,10 @@ public class MyRenderer implements GLSurfaceView.Renderer {
     private void InitialWorldParam(){
         glClear(GLES20.GL_DEPTH_BUFFER_BIT);
         worldShader.useProgram();
-        worldShader.setLightModel(lightLocation, pikachu.mCamera.position);
+        worldShader.setLightModel(lightLocation, pikachu.mCamera.position, true); //If need shadow show;
+        worldShader.setShininess(25);
+        worldShader.setLightColor(new Vector3f(1, 1, 1));
+        //world.InitShadow(worldShader, wWidth, wHeight);
     }
 
     private void drawArrowBottons() {

@@ -22,15 +22,15 @@ public class BallModel extends BaseModel {
                 float [] cos = new float []{(float) Math.cos(j * Math.PI / 180.0), (float) Math.cos((j+resolution) * Math.PI / 180.0)};
                 float [] sin = new float []{-(float) Math.sin(j * Math.PI / 180.0), -(float) Math.sin((j+resolution) * Math.PI / 180.0)};
 
-                points.add(new Vector3f(r[0] * sin[0], r[0] * cos[0],h[0] ));
+                points.add(new Vector3f(0.5f * r[0] * sin[0] + 0.5f, 0.5f * r[0] * cos[0] + 0.5f,0.5f * h[0] + 0.5f ));
                 normals.add(new Vector3f(r[0] * sin[0], r[0] * cos[0],h[0] ));
                 texture.add(new Vector2f(r[0] * sin[0], r[0] * cos[0]));
 
-                points.add(new Vector3f(r[0] * sin[1], r[0] * cos[1],h[0] ));
+                points.add(new Vector3f(0.5f * r[0] * sin[1] + 0.5f, 0.5f * r[0] * cos[1] + 0.5f,0.5f * h[0] + 0.5f));
                 normals.add(new Vector3f(r[0] * sin[1], r[0] * cos[1],h[0] ));
                 texture.add(new Vector2f(r[0] * sin[1], r[0] * cos[1]));
 
-                points.add(new Vector3f(r[1] * sin[0], r[1] * cos[0],h[1] ));
+                points.add(new Vector3f(0.5f * r[1] * sin[0] + 0.5f, 0.5f * r[1] * cos[0] + 0.5f,0.5f * h[1] + 0.5f ));
                 normals.add(new Vector3f(r[1] * sin[0], r[1] * cos[0],h[1] ));
                 texture.add(new Vector2f(r[1] * sin[0], r[1] * cos[0]));
 
@@ -41,15 +41,15 @@ public class BallModel extends BaseModel {
                 });
                 count += 3;
 
-                points.add(new Vector3f(r[1] * sin[0], r[1] * cos[0],h[1] ));
+                points.add(new Vector3f(0.5f * r[1] * sin[0] + 0.5f, 0.5f * r[1] * cos[0] + 0.5f,0.5f +  0.5f *h[1] ));
                 normals.add(new Vector3f(r[1] * sin[0], r[1] * cos[0],h[1] ));
                 texture.add(new Vector2f(r[1] * sin[0], r[1] * cos[0]));
 
-                points.add(new Vector3f(r[0] * sin[1], r[0] * cos[1],h[0] ));
+                points.add(new Vector3f(0.5f +  0.5f*r[0] * sin[1], 0.5f + 0.5f*r[0] * cos[1],0.5f + 0.5f*h[0] ));
                 normals.add(new Vector3f(r[0] * sin[1], r[0] * cos[1],h[0] ));
                 texture.add(new Vector2f(r[0] * sin[1], r[0] * cos[1]));
 
-                points.add(new Vector3f(r[1] * sin[1], r[1] * cos[1], h[1] ));
+                points.add(new Vector3f(0.5f + 0.5f*r[1] * sin[1], 0.5f + 0.5f*r[1] * cos[1], 0.5f + 0.5f*h[1] ));
                 normals.add(new Vector3f(r[1] * sin[1], r[1] * cos[1], h[1] ));
                 texture.add(new Vector2f(r[1] * sin[1], r[1] * cos[1]));
 
