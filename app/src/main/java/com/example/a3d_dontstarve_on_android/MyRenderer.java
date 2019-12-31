@@ -25,6 +25,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import com.example.a3d_dontstarve_on_android.Character.Pikachu;
+import com.example.a3d_dontstarve_on_android.Fruit.Fruit;
 import com.example.a3d_dontstarve_on_android.Interface.ArrowButton;
 import com.example.a3d_dontstarve_on_android.Interface.PikachuState;
 import com.example.a3d_dontstarve_on_android.Monster.Monster;
@@ -94,6 +95,7 @@ public class MyRenderer implements GLSurfaceView.Renderer {
     public Pikachu pikachu;
 
     private Monster monster;
+    private Fruit fruit;
 
     public MyRenderer(Context context){
         this.context = context;
@@ -121,6 +123,7 @@ public class MyRenderer implements GLSurfaceView.Renderer {
         pikachuState = new PikachuState(this.context);
 
         monster = new Monster(context);
+        fruit = new Fruit(context);
 
         GlobalTimer.initializeTimer();
     }
@@ -167,6 +170,7 @@ public class MyRenderer implements GLSurfaceView.Renderer {
 //        world.renderWorld(worldShader, new Matrix4f(viewProjectionMatrix));
         pikachu.draw(viewProjectionMatrix);
         monster.draw(viewProjectionMatrix);
+        fruit.draw(viewProjectionMatrix);
 
         glDisable(GL_DEPTH_TEST);
 

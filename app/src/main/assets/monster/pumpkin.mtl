@@ -40,8 +40,8 @@ newmtl Stalk01
 	Kd 1.0000 1.0000 1.0000
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka maps\Stalk01.jpg
-	map_Kd maps\Stalk01.jpg
+	map_Ka maps/Stalk01.jpg
+	map_Kd maps/Stalk01.jpg
 
 newmtl Stalk02
 	Ns 10.0000
@@ -54,5 +54,5 @@ newmtl Stalk02
 	Kd 1.0000 1.0000 1.0000
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka maps\Stalk02.jpg
-	map_Kd maps\Stalk02.jpg
+	map_Ka maps/Stalk02.jpg
+	map_Kd maps/Stalk02.jpg
