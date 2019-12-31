@@ -33,7 +33,9 @@ public class WorldShaderProgram extends ShaderProgram {
     private int hasTexture;
     private int shininess;
     private int lightColor;
-
+    private Vector3f lightPos;
+    private boolean isParallel;
+    private Vector3f camLoc;
     public float zNear;
     public float zFar;
 
@@ -86,6 +88,9 @@ public class WorldShaderProgram extends ShaderProgram {
     }
 
     public void setLightModel(Vector3f lightLoc, Vector3f camLoc, boolean isParallel){
+        this.lightPos = lightLoc;
+        this.isParallel = isParallel;
+        this.camLoc = camLoc;
         glUniform4f(mLight, lightLoc.x, lightLoc.y, lightLoc.z, isParallel?1:-1);
         glUniform3f(mCamera, camLoc.x, camLoc.y, camLoc.z);
     }
@@ -95,6 +100,13 @@ public class WorldShaderProgram extends ShaderProgram {
         GLES20.glUniform3fv(lightColor, 1, color, 0);
     }
 
+    public Vector3f getLightPosition(){
+        return  this.lightPos;
+    }
+
+    public boolean isLightParallel(){
+        return this.isParallel;
+    }
     public void setShininess(float s){
         glUniform1f(shininess, s);
     }
@@ -131,5 +143,7 @@ public class WorldShaderProgram extends ShaderProgram {
         glUniform1i(hasShadow, state?1:0);
     }
 
-
+    public Vector3f getCamLoc(){
+        return camLoc;
+    }
 }
