@@ -9,8 +9,6 @@ public class MyGLSurfaceView extends GLSurfaceView {
     public final MyRenderer mRenderer;
     private float mPreviousX;
     private float mPreviousY;
-    private long lastTouch;
-
 
     public MyGLSurfaceView(Context context) {
         super(context);
@@ -57,18 +55,16 @@ public class MyGLSurfaceView extends GLSurfaceView {
                 float dx = x - mPreviousX; // 从左往有滑动时: x 值增大，dx 为正；反之则否。
                 float dy = y - mPreviousY; // 从上往下滑动时: y 值增大，dy 为正；反之则否。
                 // OpenGL 绕 z 轴的旋转符合左手定则，即 z 轴朝屏幕里面为正。
-                mRenderer.mCamera.pitch(dy/10);
-                mRenderer.mCamera.rotateWorldY(dx/10);
+
+                mRenderer.pikachu.mCamera.moveToView();
+                mRenderer.pikachu.mCamera.rotate(dx/10, dy/10);
+                mRenderer.pikachu.mCamera.backFromView();
+
                 // 在计算旋转角度后，调用requestRender()来告诉渲染器现在可以进行渲染了
                 requestRender();
                 break;
             case MotionEvent.ACTION_UP:
                 mRenderer.moveDirection = 0;
-//                final long now = System.currentTimeMillis();
-//                if (now-lastTouch<300) {
-//                    mRenderer.changeProjection();
-//                }
-//                lastTouch = now;
                 requestRender();
                 break;
         }

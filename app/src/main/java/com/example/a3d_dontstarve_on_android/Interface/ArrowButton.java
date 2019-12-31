@@ -4,7 +4,6 @@ import android.content.Context;
 import android.opengl.GLES20;
 
 import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
 
 import data.VertexAarray;
 
@@ -16,10 +15,10 @@ public class ArrowButton {
     private final ByteBuffer indexArray;
     private final VertexAarray vertexAarray;
     private float color[] = {0.5f, 0.5f, 0.5f, 1.0f};
-    private ArrowBottonShaderProgram mProgram;
+    private InterfaceShaderProgram mProgram;
 
     public ArrowButton(Context context) {
-        mProgram = new ArrowBottonShaderProgram(context);
+        mProgram = new InterfaceShaderProgram(context);
         // Create a unit cube.
         vertexAarray = new VertexAarray(new float[]{
                 -1.3f,  0.0f,  0.0f,

@@ -11,13 +11,13 @@ import static android.opengl.GLES20.glGetUniformLocation;
 import static android.opengl.GLES20.glUniform4fv;
 import static android.opengl.GLES20.glUniformMatrix4fv;
 
-public class ArrowBottonShaderProgram extends ShaderProgram {
+public class InterfaceShaderProgram extends ShaderProgram {
     private int mMatrix;
     private int mColor;
     private int mVertex;
 
-    public ArrowBottonShaderProgram(Context context) {
-        super(context, R.raw.arrowbutton_vertex_shader, R.raw.arrowbutton_fragment_shader);
+    public InterfaceShaderProgram(Context context) {
+        super(context, R.raw.interface_vertex_shader, R.raw.interface_fragment_shader);
         mMatrix = glGetUniformLocation(program, "vMatrix");
         mColor = glGetUniformLocation(program, "vColor");
         mVertex = glGetAttribLocation(program, "vPosition");
@@ -34,6 +34,4 @@ public class ArrowBottonShaderProgram extends ShaderProgram {
     public int getVertexAttrLocation() {
         return mVertex;
     }
-
-
 }

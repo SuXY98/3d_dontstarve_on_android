@@ -95,6 +95,17 @@ public class Vector3f {
         return ret;
     }
 
+    public Vector3f reverse() {
+        Vector3f ret = new Vector3f();
+        float rx = -this.x;
+        float ry = -this.y;
+        float rz = -this.z;
+        ret.x = rx;
+        ret.y = ry;
+        ret.z = rz;
+        return ret;
+    }
+
 //    @Override
 //    public Vector3f clone() throws CloneNotSupportedException {
 //        try {
