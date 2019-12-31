@@ -30,6 +30,8 @@ import com.example.a3d_dontstarve_on_android.Fruit.Fruit;
 import com.example.a3d_dontstarve_on_android.Interface.ArrowButton;
 import com.example.a3d_dontstarve_on_android.Interface.PikachuState;
 import com.example.a3d_dontstarve_on_android.Monster.Monster;
+import com.example.a3d_dontstarve_on_android.Nurbs.NurbsShader;
+import com.example.a3d_dontstarve_on_android.Nurbs.Nurbssurf;
 import com.example.a3d_dontstarve_on_android.Skybox.SkyboxShaderProgram;
 import com.example.a3d_dontstarve_on_android.Skybox.Skybox;
 import com.example.a3d_dontstarve_on_android.Terrain.Terrain;
@@ -68,6 +70,9 @@ public class MyRenderer implements GLSurfaceView.Renderer {
 
     private Terrain terrain;
     private TerrainShader terrainShader;
+    private Nurbssurf nurbssurf;
+    private NurbsShader nurbsShader;
+
     private float[] terrainMMatrix = new float[]{
             1,0,0,0,
             0,1,0,0,
@@ -95,8 +100,7 @@ public class MyRenderer implements GLSurfaceView.Renderer {
 
     public Pikachu pikachu;
 
-    private Monster monster;
-    private Fruit fruit;
+    private ObjManager objManager;
 
     public MyRenderer(Context context){
         this.context = context;
@@ -113,6 +117,8 @@ public class MyRenderer implements GLSurfaceView.Renderer {
         //todo: 在地形上构造一个NURBS曲面山
         terrainShader = new TerrainShader(context,R.drawable.grass);
         terrain = new Terrain();
+        nurbsShader = new NurbsShader(context);
+        nurbssurf = new Nurbssurf();
 
         worldShader = new WorldShaderProgram(context);world = new World(context);
         lightLocation = new Vector3f(2, 2, -2);
@@ -123,8 +129,7 @@ public class MyRenderer implements GLSurfaceView.Renderer {
 
         pikachuState = new PikachuState(this.context);
 
-        monster = new Monster(context);
-        fruit = new Fruit(context);
+        objManager = new ObjManager(this.context);
 
         GlobalTimer.initializeTimer();
     }
@@ -162,21 +167,28 @@ public class MyRenderer implements GLSurfaceView.Renderer {
         multiplyMM(viewProjectionMatrix,0,projectionMatrix,0,viewMatrix,0);
 
         drawSkybox();
-//        drawBoardImg();
-        drawTerrain();
+
 
         glEnable(GLES20.GL_DEPTH_TEST);
 
+        drawTerrain();
+        drawNurbs();
+
         InitialWorldParam();
-        world.renderWorld(worldShader, viewProjectionMatrix);
+       // world.renderWorld(worldShader, viewProjectionMatrix);
         pikachu.draw(viewProjectionMatrix);
-        monster.draw(viewProjectionMatrix);
-        fruit.draw(viewProjectionMatrix);
+        objManager.Draw(viewProjectionMatrix,pikachu.mCamera.getPikachuPos());
 
         glDisable(GL_DEPTH_TEST);
 
         drawArrowBottons();
         drawPikachuState();
+    }
+
+    private void drawNurbs(){
+        nurbsShader.useProgram();
+        nurbsShader.setUniforms(viewMatrix,projectionMatrix);
+        nurbssurf.draw(nurbsShader);
     }
 
     private void drawTerrain(){

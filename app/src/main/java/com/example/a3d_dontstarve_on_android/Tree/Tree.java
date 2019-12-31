@@ -1,8 +1,11 @@
-package com.example.a3d_dontstarve_on_android.Monster;
+package com.example.a3d_dontstarve_on_android.Tree;
 
 import android.content.Context;
 import android.opengl.Matrix;
 
+import com.example.a3d_dontstarve_on_android.Monster.Obj3DMonster;
+import com.example.a3d_dontstarve_on_android.Monster.ObjFilterMonster;
+import com.example.a3d_dontstarve_on_android.Monster.ObjReaderMonster;
 import com.example.a3d_dontstarve_on_android.Utils.Gl2Utils;
 import com.example.a3d_dontstarve_on_android.Vector3f;
 
@@ -11,12 +14,12 @@ import java.util.List;
 
 import static android.opengl.Matrix.multiplyMM;
 
-public class Monster {
+public class Tree {
     private List<ObjFilterMonster> filters;
     private float displayAngle;
 
-    public Monster(Context context) {
-        List<Obj3DMonster> model= ObjReaderMonster.readMultiObj(context,"assets/monster/pumpkin.obj");
+    public Tree(Context context) {
+        List<Obj3DMonster> model= ObjReaderMonster.readMultiObj(context,"assets/tree/file.obj");
         filters=new ArrayList<>();
         for (int i=0;i<model.size();i++){
             ObjFilterMonster f=new ObjFilterMonster(context.getResources());
