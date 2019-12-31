@@ -105,7 +105,11 @@ public class Vector3f {
         ret.z = rz;
         return ret;
     }
-
+    public float distance(Vector3f otherp){
+        Vector3f p = this.minus(otherp);
+        float px = p.x;float py = p.y;float pz = p.z;
+        return (float)Math.sqrt(px*px +py*py+pz*pz);
+    }
 //    @Override
 //    public Vector3f clone() throws CloneNotSupportedException {
 //        try {

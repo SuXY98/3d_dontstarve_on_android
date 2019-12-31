@@ -3,6 +3,7 @@ package com.example.a3d_dontstarve_on_android.Fruit;
 import android.content.Context;
 import android.opengl.Matrix;
 
+import com.example.a3d_dontstarve_on_android.GlobalTimer;
 import com.example.a3d_dontstarve_on_android.Utils.Gl2Utils;
 import com.example.a3d_dontstarve_on_android.Vector3f;
 
@@ -28,16 +29,13 @@ public class Fruit {
         }
     }
 
-    public void draw(float[] VPMatrix) {
+    public void draw(float[] VPMatrix,Vector3f position) {
         float[] MVPMatrix = new float[16];
-        Vector3f position = new Vector3f(5, 0, 5);
-//        float jumpTime = (GlobalTimer.getCurrentMS()% 900) / 5;
+       float rTime = (GlobalTimer.getCurrentMS()/10);
         for (ObjFilterFruit f:filters){
             float[] matrix= Gl2Utils.getOriginalMatrix();
             Matrix.translateM(matrix, 0, position.x, position.y, position.z);
-            //System.out.println(mCamera.getYaw());
-//            Matrix.translateM(matrix, 0, 0, 0.3f * (float)Math.abs(Math.cos(Math.toRadians(jumpTime))), 0);
-//            Matrix.rotateM(matrix, 0, 90-displayAngle, 0, 1, 0);
+            Matrix.rotateM(matrix, 0, rTime, 0, 1, 0);
             Matrix.scaleM(matrix,0,0.002f,0.002f,0.002f);
             multiplyMM(MVPMatrix,0,VPMatrix,0,matrix,0);
             f.setMatrix(MVPMatrix);
