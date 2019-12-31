@@ -19,7 +19,6 @@ public class GameOver extends Activity {
             public void onClick(View v) {
                 Intent intent=new Intent(GameOver.this,GameStart.class);
                 startActivity(intent);
-                finish();
             }
         });
 

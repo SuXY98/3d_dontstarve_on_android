@@ -3,6 +3,9 @@ package com.example.a3d_dontstarve_on_android.Character;
 import android.content.Context;
 import android.util.Log;
 
+import com.example.a3d_dontstarve_on_android.Character.Obj3D;
+import com.example.a3d_dontstarve_on_android.ObjLoader.MtlInfo;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -91,7 +94,7 @@ public class ObjReader {
         ArrayList<Float> oFVs=new ArrayList<>();     //面顶点
         ArrayList<Float> oFVNs=new ArrayList<>();
         ArrayList<Float> oFVTs=new ArrayList<>();
-        HashMap<String,MtlInfo> mTls=null;
+        HashMap<String, MtlInfo> mTls=null;
         HashMap<String,Obj3D> mObjs=new HashMap<>();
         Obj3D nowObj=null;
         MtlInfo nowMtl=null;

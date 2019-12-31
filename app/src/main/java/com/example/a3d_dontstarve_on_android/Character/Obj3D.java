@@ -1,5 +1,7 @@
 package com.example.a3d_dontstarve_on_android.Character;
 
+import com.example.a3d_dontstarve_on_android.ObjLoader.MtlInfo;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;

@@ -7,7 +7,8 @@ import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.util.Log;
 
-import com.example.a3d_dontstarve_on_android.Character.AFilter;
+import com.example.a3d_dontstarve_on_android.Character.Obj3D;
+import com.example.a3d_dontstarve_on_android.ObjLoader.AFilter;
 
 import java.io.IOException;
 

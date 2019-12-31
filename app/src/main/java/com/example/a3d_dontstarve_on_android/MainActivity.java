@@ -23,6 +23,7 @@ import static java.security.AccessController.getContext;
 public class MainActivity extends AppCompatActivity {
 
     private MyGLSurfaceView mGlSurfaceView;
+    private CloseActivityReceiver closeReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         mGlSurfaceView = new MyGLSurfaceView(this);
         setContentView(mGlSurfaceView);
 
-        CloseActivityReceiver closeReceiver = new CloseActivityReceiver();
+        closeReceiver = new CloseActivityReceiver();
         IntentFilter intentFilter = new IntentFilter("con.lcry.close.activity");
         registerReceiver(closeReceiver, intentFilter);
     }
@@ -41,5 +42,11 @@ public class MainActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent){
             MainActivity.this.finish();
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(closeReceiver);
     }
 }
