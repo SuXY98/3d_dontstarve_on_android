@@ -2,7 +2,7 @@ package com.example.a3d_dontstarve_on_android.World.Objs;
 
 import android.opengl.GLES20;
 
-import com.example.a3d_dontstarve_on_android.Character.MtlInfo;
+import com.example.a3d_dontstarve_on_android.ObjLoader.MtlInfo;
 import com.example.a3d_dontstarve_on_android.Character.Obj3D;
 import com.example.a3d_dontstarve_on_android.Vector2f;
 import com.example.a3d_dontstarve_on_android.Vector3f;

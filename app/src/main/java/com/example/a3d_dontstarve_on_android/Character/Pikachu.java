@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.opengl.Matrix.multiplyMM;
-import static com.example.a3d_dontstarve_on_android.GlobalTimer.getCurrentMS;
 
 public class Pikachu {
     private List<ObjFilter2> filters;
@@ -19,7 +18,7 @@ public class Pikachu {
     private float displayAngle;
 
     public Pikachu(Context context) {
-        List<Obj3D> model=ObjReader.readMultiObj(context,"assets/character/pikachu.obj");
+        List<Obj3D> model= ObjReader.readMultiObj(context,"assets/character/pikachu.obj");
         filters=new ArrayList<>();
         for (int i=0;i<model.size();i++){
             ObjFilter2 f=new ObjFilter2(context.getResources());

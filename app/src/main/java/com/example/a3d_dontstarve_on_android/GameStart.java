@@ -20,7 +20,6 @@ public class GameStart extends Activity {
             public void onClick(View v) {
                 Intent intent=new Intent(GameStart.this, MainActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
     }
