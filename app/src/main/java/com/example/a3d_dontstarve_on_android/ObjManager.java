@@ -64,6 +64,9 @@ public class ObjManager {
         for(int i = 0;i < objs.size();i++){
             objAttri tmp = objs.elementAt(i);
             if(tmp.type == Type.MONSTER){
+                if(campos.distance(tmp.pos) > 100){
+                    continue;
+                }
                 if(campos.distance(tmp.pos) < 10){
                     //范围检测
                     //System.out.print("obj manager" + "dis tance" + campos.distance(tmp.pos)+"\n");
@@ -76,8 +79,14 @@ public class ObjManager {
                 }
                 monster.draw(VPMatrix,tmp.pos);
             }else if(tmp.type == Type.FRUIT){
+                if(campos.distance(tmp.pos) > 100){
+                    continue;
+                }
                 fruit.draw(VPMatrix,tmp.pos);
             }else {
+                if(campos.distance(tmp.pos) > 100){
+                    continue;
+                }
                 tree.draw(VPMatrix,tmp.pos);
             }
         }
@@ -85,5 +94,9 @@ public class ObjManager {
 
     public Vector<objAttri> GetObjsAttri(){
         return objs;
+    }
+
+    public void deleteObj(int index){
+        objs.remove(index);
     }
 }

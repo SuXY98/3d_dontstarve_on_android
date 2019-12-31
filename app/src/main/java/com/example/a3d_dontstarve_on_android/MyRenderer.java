@@ -142,7 +142,7 @@ public class MyRenderer implements GLSurfaceView.Renderer {
         // Set the OpenGL viewport to fill the entire surface.
         glViewport(0,0,width,height);
         MatrixHelper.perspectiveM(projectionMatrix, 45, (float) width
-                / (float) height, 0.1f, 200f);
+                / (float) height, 0.1f, 100f);
     }
     @Override
     public void onDrawFrame(GL10 glUnused) {
