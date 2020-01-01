@@ -36,23 +36,40 @@ public class ObjManager {
         objs = new Vector<objAttri>();
         for(int i = 0;i < 4;i++){
             for(int j = 0;j < 4;j++){
-                objAttri tmpMonster = new objAttri(new Vector3f(-150 + 80 * i,1,-150 + 80 * j),Type.MONSTER);
-                objs.add(tmpMonster);
+                float randx = (float)(Math.random() -0.5) * 450;
+                float randz = (float)(Math.random() -0.5) * 450;
+                while((randx < 30 && randx > -30 && randx < -200 && randx > 200)
+                        && (randz < 30 && randz > -30 && randz < -200 && randz > 200)){
+                    randx = (float)(Math.random() -0.5) * 450;
+                    randz = (float)(Math.random() -0.5) * 450;
+                }
+                objAttri tmpFruit = new objAttri(new Vector3f(randx,0,randz),Type.MONSTER);
+                objs.add(tmpFruit);
             }
         }
         for(int i = 0;i < 3;i++){
             for(int j = 0;j < 3;j++){
-                float randx = (float)(Math.random() -0.5) * 100;
-                float randz = (float)(Math.random() -0.5) * 100;
-                objAttri tmpTree = new objAttri(new Vector3f(-150 + 120 * i + randx,0,-150 + 120 * j+randz),Type.TREE);
-                objs.add(tmpTree);
+                float randx = (float)(Math.random() -0.5) * 450;
+                float randz = (float)(Math.random() -0.5) * 450;
+                while((randx < 30 && randx > -30 && randx < -200 && randx > 200)
+                        && (randz < 30 && randz > -30 && randz < -200 && randz > 200)){
+                    randx = (float)(Math.random() -0.5) * 450;
+                    randz = (float)(Math.random() -0.5) * 450;
+                }
+                objAttri tmpFruit = new objAttri(new Vector3f(randx,0,randz),Type.TREE);
+                objs.add(tmpFruit);
             }
         }
         for(int i = 0;i < 6;i++){
             for(int j = 0;j < 6;j++){
-                float randx = (float)(Math.random() -0.5) * 20;
-                float randz = (float)(Math.random() -0.5) * 20;
-                objAttri tmpFruit = new objAttri(new Vector3f(-150 + 60 * i + randx,0,-150 + 60 * j+randz),Type.FRUIT);
+                float randx = (float)(Math.random() -0.5) * 450;
+                float randz = (float)(Math.random() -0.5) * 450;
+                while((randx < 30 && randx > -30 && randx < -200 && randx > 200)
+                        && (randz < 30 && randz > -30 && randz < -200 && randz > 200)){
+                    randx = (float)(Math.random() -0.5) * 450;
+                    randz = (float)(Math.random() -0.5) * 450;
+                }
+                objAttri tmpFruit = new objAttri(new Vector3f(randx,0,randz),Type.FRUIT);
                 objs.add(tmpFruit);
             }
         }
@@ -94,6 +111,18 @@ public class ObjManager {
 
     public Vector<objAttri> GetObjsAttri(){
         return objs;
+    }
+
+    public void addFruit(){
+        float randx = (float)(Math.random() -0.5) * 450;
+        float randz = (float)(Math.random() -0.5) * 450;
+        while((randx < 30 && randx > -30 && randx < -200 && randx > 200)
+                && (randz < 30 && randz > -30 && randz < -200 && randz > 200)){
+            randx = (float)(Math.random() -0.5) * 450;
+            randz = (float)(Math.random() -0.5) * 450;
+        }
+        objAttri tmpFruit = new objAttri(new Vector3f(randx,0,randz),Type.FRUIT);
+        objs.add(tmpFruit);
     }
 
     public void deleteObj(int index){
