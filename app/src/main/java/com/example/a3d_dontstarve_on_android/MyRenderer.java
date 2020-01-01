@@ -102,8 +102,6 @@ public class MyRenderer implements GLSurfaceView.Renderer {
 
     private ObjManager objManager;
 
-    private int collisionState;
-
     public MyRenderer(Context context){
         this.context = context;
     }
