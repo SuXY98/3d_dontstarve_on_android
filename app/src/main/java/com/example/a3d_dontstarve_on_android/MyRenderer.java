@@ -198,7 +198,7 @@ public class MyRenderer implements GLSurfaceView.Renderer {
 
         InitialWorldParam();
         // world.renderWorld(worldShader, viewProjectionMatrix);
-        
+
         glDisable(GL_DEPTH_TEST);
 
         drawArrowBottons();
