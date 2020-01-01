@@ -193,12 +193,12 @@ public class MyRenderer implements GLSurfaceView.Renderer {
         drawTerrain();
         drawNurbs();
 
-        InitialWorldParam();
-       // world.renderWorld(worldShader, viewProjectionMatrix);
-
         pikachu.draw(viewProjectionMatrix);
         objManager.Draw(viewProjectionMatrix,pikachu.mCamera.getPikachuPos());
 
+        InitialWorldParam();
+        // world.renderWorld(worldShader, viewProjectionMatrix);
+        
         glDisable(GL_DEPTH_TEST);
 
         drawArrowBottons();
@@ -328,6 +328,7 @@ public class MyRenderer implements GLSurfaceView.Renderer {
         }
         if (collideFruit) {
             pikachuState.handleCollision(0);
+            objManager.addFruit();
         }
         if (collideMonster) {
             if (!GlobalTimer.justCollided()) {

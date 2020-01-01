@@ -38,8 +38,8 @@ public class ObjManager {
             for(int j = 0;j < 4;j++){
                 float randx = (float)(Math.random() -0.5) * 450;
                 float randz = (float)(Math.random() -0.5) * 450;
-                while((randx < 30 && randx > -30 && randx < -200 && randx > 200)
-                        && (randz < 30 && randz > -30 && randz < -200 && randz > 200)){
+                while((randx < 30 && randx > -30 && randx < -180 && randx > 180)
+                        && (randz < 30 && randz > -30 && randz < -180 && randz > 180)){
                     randx = (float)(Math.random() -0.5) * 450;
                     randz = (float)(Math.random() -0.5) * 450;
                 }
@@ -51,8 +51,8 @@ public class ObjManager {
             for(int j = 0;j < 3;j++){
                 float randx = (float)(Math.random() -0.5) * 450;
                 float randz = (float)(Math.random() -0.5) * 450;
-                while((randx < 30 && randx > -30 && randx < -200 && randx > 200)
-                        && (randz < 30 && randz > -30 && randz < -200 && randz > 200)){
+                while((randx < 30 && randx > -30 && randx < -180 && randx > 180)
+                        && (randz < 30 && randz > -30 && randz < -180 && randz > 180)){
                     randx = (float)(Math.random() -0.5) * 450;
                     randz = (float)(Math.random() -0.5) * 450;
                 }
@@ -64,8 +64,8 @@ public class ObjManager {
             for(int j = 0;j < 6;j++){
                 float randx = (float)(Math.random() -0.5) * 450;
                 float randz = (float)(Math.random() -0.5) * 450;
-                while((randx < 30 && randx > -30 && randx < -200 && randx > 200)
-                        && (randz < 30 && randz > -30 && randz < -200 && randz > 200)){
+                while((randx < 30 && randx > -30 && randx < -180 && randx > 180)
+                        && (randz < 30 && randz > -30 && randz < -180 && randz > 180)){
                     randx = (float)(Math.random() -0.5) * 450;
                     randz = (float)(Math.random() -0.5) * 450;
                 }
@@ -116,8 +116,8 @@ public class ObjManager {
     public void addFruit(){
         float randx = (float)(Math.random() -0.5) * 450;
         float randz = (float)(Math.random() -0.5) * 450;
-        while((randx < 30 && randx > -30 && randx < -200 && randx > 200)
-                && (randz < 30 && randz > -30 && randz < -200 && randz > 200)){
+        while((randx < 30 && randx > -30 && randx < -180 && randx > 180)
+                && (randz < 30 && randz > -30 && randz < -180 && randz > 180)){
             randx = (float)(Math.random() -0.5) * 450;
             randz = (float)(Math.random() -0.5) * 450;
         }
