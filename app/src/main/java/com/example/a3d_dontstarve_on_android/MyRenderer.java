@@ -1,5 +1,6 @@
 package com.example.a3d_dontstarve_on_android;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.opengl.GLES20;
@@ -39,6 +40,8 @@ import com.example.a3d_dontstarve_on_android.Terrain.Terrain;
 import com.example.a3d_dontstarve_on_android.Terrain.TerrainShader;
 import com.example.a3d_dontstarve_on_android.World.World;
 import com.example.a3d_dontstarve_on_android.World.WorldShaderProgram;
+
+import java.util.Vector;
 
 import util.MatrixHelper;
 
@@ -274,5 +277,30 @@ public class MyRenderer implements GLSurfaceView.Renderer {
             Intent intent=new Intent(context,GameOver.class);
             context.startActivity(intent);
         }
+    }
+
+    public Vector<Integer> isCollided(Vector3f model, Vector<objAttri> attris){
+        //因为是球,设置碰撞半径
+        float length = 1;
+        Vector<Integer> result = new Vector<>();
+        for(objAttri attr: attris){
+            if(model.distance(attr.pos) < length){
+                switch(attr.type){
+                    case TREE:
+                        result.add(1);
+                        break;
+                    case FRUIT:
+                        result.add(3);
+                        break;
+                    case MONSTER:
+                        result.add(2);
+                        break;
+                }
+            }else{
+                result.add(0);
+            }
+        }
+        //0 没撞到, 1树/山 2怪物 3 水果
+        return result;
     }
 }
