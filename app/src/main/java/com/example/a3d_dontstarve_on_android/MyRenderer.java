@@ -200,7 +200,7 @@ public class MyRenderer implements GLSurfaceView.Renderer {
 
     private void drawSkybox(){
         skyboxProgram.useProgram();
-        skyboxProgram.setUniforms(viewMatrix,projectionMatrix);
+        skyboxProgram.setUniforms(viewMatrix,projectionMatrix,GlobalTimer.getMixFactors());
         skybox.bindData(skyboxProgram);
         skybox.draw();
     }
