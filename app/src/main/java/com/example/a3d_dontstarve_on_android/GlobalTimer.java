@@ -43,6 +43,9 @@ public final class GlobalTimer {
         return currentTime - startTime;
     }
 
+    public static float getProcess(){
+        return (currentTime - startTime) / (float)DAYLENGTH;
+    }
     public static void updateTimer() {
         currentTime = (new Date()).getTime();
         if (currentTime - startTime>=DAYLENGTH) {

@@ -48,12 +48,8 @@ public class World {
     int [] fboId;
     int [] depthTextureId;
     int [] renderTextureId;
+    SunAndMoon sunAndMoon;
     private boolean isShadowBinded;
-
-    public boolean isCollided(int objID1, int objID2){
-        Vector3f [] box1 = objs.elementAt(objID1).getBox(models.elementAt(objs.elementAt(objID1).getModelID()).getBox());
-        return objs.elementAt(objID2).isCollided(models.elementAt(objs.elementAt(objID2).getModelID()).getBox(), box1);
-    }
 
     public World(Context context){
         this.context = context;
@@ -68,36 +64,34 @@ public class World {
         // create render buffer and bind 16-bit depth buffer
         GLES20.glGenRenderbuffers(1, depthTextureId, 0);
         BaseModel m = new BallModel(1.0f);
+        sunAndMoon = new SunAndMoon();
+
         m.setK(
                 new Vector3f[]{
-                    new Vector3f(0.1f, 0.1f, 0.1f),
-                        new Vector3f(0.5f, 0.5f, 0.5f),
-                        new Vector3f(0.3f, 0.3f, 0.3f),
+                    new Vector3f(1f, 1f, 1f),
+                        new Vector3f(0f, 0f, 0f),
+                        new Vector3f(0f, 0f, 0f),
                 }
         );
+        m.openTexture = false;
         models.add(m);
-        Object object = new Object(0);
 
-        float [] mModelView = new float[16];
+        //sun
         objs.add(new Object(0));
-        Matrix.setIdentityM(mModelView, 0);
-        Matrix.translateM(mModelView,0, mModelView, 0,2,2, -2);
-        objs.elementAt(0).setObjColor(new Vector3f(1,0,0));
-        objs.elementAt(0).setModelViewMat(new Matrix4f(mModelView.clone()));
+        objs.elementAt(0).setObjColor(new Vector3f(1, 0, 0));
+        objs.elementAt(0).setModelViewMat(sunAndMoon.getSunPos());
+        objs.elementAt(0).drawShadow = false;
 
-        object.setModelViewMat(new Matrix4f(mModelView));
-        Matrix.setIdentityM(mModelView, 0);
+        //moon
         objs.add(new Object(0));
-
-
-        objs.elementAt(1).setModelViewMat(new Matrix4f(mModelView.clone()));
-        Matrix.translateM(mModelView, 0, mModelView, 0, 10,0,0);
-        Matrix.scaleM(mModelView,0,mModelView,0,5,5,5);
-        object.setModelViewMat(new Matrix4f(mModelView));
-        objs.add(object);
+        objs.elementAt(1).setObjColor(new Vector3f(0.9f,0.9f,0.9f));
+        objs.elementAt(1).setModelViewMat(sunAndMoon.getMoonPos());
+        objs.elementAt(1).drawShadow = false;
     }
 
     public void renderWorld(WorldShaderProgram shader, float[] vpMatrix) {
+        objs.elementAt(0).setModelViewMat(sunAndMoon.getSunPos());
+        objs.elementAt(1).setModelViewMat(sunAndMoon.getMoonPos());
         render(shader, vpMatrix, false, true);
     }
     private Bitmap readBufferPixelToBitmap(int width, int height) {
@@ -122,14 +116,10 @@ public class World {
 //                InitShadow(shader);
 ////                isShadowBinded = true;
 ////            }
-            shader.setShadow(true);
             //GLES20.glActiveTexture(GL_TEXTURE1);
             glBindTexture(GL_TEXTURE_2D, renderTextureId[0]);
-
             shader.setShadowMap(renderTextureId[0]);
             //GLES20.glActiveTexture(GL_TEXTURE0);
-        }else{
-            shader.setShadow(false);
         }
         // 获取片段着色器的颜色的句柄
         int mColorHandler = GLES20.glGetUniformLocation(shader.getShaderProgramID(), "aColor");
@@ -147,7 +137,11 @@ public class World {
             else
                 shader.setTexture(-1);
             //set shadow
-
+            if(drawShadow && obj.drawShadow){
+                shader.setShadow(true);
+            }else{
+                shader.setShadow(false);
+            }
             //draw model
             try {
                 models.elementAt(obj.getModelID()).drawSelf(shader.getShaderProgramID());
@@ -224,5 +218,10 @@ public class World {
                 );
         Matrix.multiplyMM(tMat.getArray(), 0, tMat.getArray(), 0, lMat.getArray(), 0);
         return new Matrix4f();
+    }
+
+    public boolean isCollided(int objID1, int objID2){
+        Vector3f [] box1 = objs.elementAt(objID1).getBox(models.elementAt(objs.elementAt(objID1).getModelID()).getBox());
+        return objs.elementAt(objID2).isCollided(models.elementAt(objs.elementAt(objID2).getModelID()).getBox(), box1);
     }
 }
