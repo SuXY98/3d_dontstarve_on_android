@@ -44,7 +44,7 @@ public class ObjManager {
             for(int j = 0;j < 3;j++){
                 float randx = (float)(Math.random() -0.5) * 100;
                 float randz = (float)(Math.random() -0.5) * 100;
-                objAttri tmpTree = new objAttri(new Vector3f(-150 + 120 * i + randx,1,-150 + 120 * j+randz),Type.TREE);
+                objAttri tmpTree = new objAttri(new Vector3f(-150 + 120 * i + randx,0,-150 + 120 * j+randz),Type.TREE);
                 objs.add(tmpTree);
             }
         }
@@ -52,7 +52,7 @@ public class ObjManager {
             for(int j = 0;j < 6;j++){
                 float randx = (float)(Math.random() -0.5) * 20;
                 float randz = (float)(Math.random() -0.5) * 20;
-                objAttri tmpFruit = new objAttri(new Vector3f(-150 + 60 * i + randx,1,-150 + 60 * j+randz),Type.FRUIT);
+                objAttri tmpFruit = new objAttri(new Vector3f(-150 + 60 * i + randx,0,-150 + 60 * j+randz),Type.FRUIT);
                 objs.add(tmpFruit);
             }
         }
