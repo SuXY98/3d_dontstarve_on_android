@@ -43,6 +43,27 @@ public class PikachuState {
         }
     }
 
+    public void handleCollision(int state) {
+        if (state==0) { // eat fruit
+            if (hungerDegree==7) {
+                if (hp<7) {
+                    hp++;
+                }
+            }
+            else {
+                hungerDegree++;
+            }
+        }
+        else if (state==1) {
+            if (hp>1) {
+                hp -=2;
+            }
+            else {
+                hp -=1;
+            }
+        }
+    }
+
     public boolean isAlive() {
         return hp > 0;
     }

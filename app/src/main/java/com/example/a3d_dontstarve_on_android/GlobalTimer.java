@@ -9,9 +9,10 @@ public final class GlobalTimer {
     static final long DAYLENGTH = 120000;
     private static long lastEatTime;
     private static long lastUpdateTime;
+    private static long lastCollisionTime;
 
     public static void initializeTimer() {
-        startTime = currentTime = lastUpdateTime = (new Date()).getTime();
+        startTime = currentTime = lastUpdateTime = lastCollisionTime = (new Date()).getTime();
         lastEatTime = startTime + DAYLENGTH/2;
     }
 
@@ -57,5 +58,15 @@ public final class GlobalTimer {
 
     public static long getDeltaTime() {
         return currentTime-lastUpdateTime;
+    }
+
+    public static boolean onMonsterCollision() {
+        if (currentTime-lastCollisionTime<=1000) {
+            return false;
+        }
+        else {
+            lastCollisionTime = currentTime;
+            return true;
+        }
     }
 }

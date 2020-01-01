@@ -56,6 +56,7 @@ public class World {
     }
 
     public World(Context context){
+
         this.context = context;
         objs = new Vector<>();
         models = new Vector<>();

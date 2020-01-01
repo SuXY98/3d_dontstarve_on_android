@@ -102,6 +102,8 @@ public class MyRenderer implements GLSurfaceView.Renderer {
 
     private ObjManager objManager;
 
+    private int collisionState;
+
     public MyRenderer(Context context){
         this.context = context;
     }
@@ -149,6 +151,10 @@ public class MyRenderer implements GLSurfaceView.Renderer {
         checkHP();
 
         GlobalTimer.updateTimer();
+
+        collisionState = 1;
+        if (collisionState)
+
         if (moveDirection>0) {
             pikachu.mCamera.move(moveDirection, (float)GlobalTimer.getDeltaTime()/20);
             pikachu.changeDisplayAngle(moveDirection);
@@ -158,11 +164,6 @@ public class MyRenderer implements GLSurfaceView.Renderer {
         glViewport(0,0,wWidth,wHeight);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        /*
-         * TODO:
-         *       if there is camera move yaw and pitch
-         *       rotate viewProjection
-         * */
         viewMatrix = pikachu.mCamera.getViewMatrix();
         multiplyMM(viewProjectionMatrix,0,projectionMatrix,0,viewMatrix,0);
 
