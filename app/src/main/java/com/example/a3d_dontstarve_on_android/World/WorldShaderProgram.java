@@ -10,6 +10,7 @@ import com.example.a3d_dontstarve_on_android.Vector3f;
 import util.ShaderProgram;
 
 import static android.opengl.GLES20.GL_TEXTURE0;
+import static android.opengl.GLES20.GL_TEXTURE_2D;
 import static android.opengl.GLES20.GL_TEXTURE_BINDING_2D;
 import static android.opengl.GLES20.glActiveTexture;
 import static android.opengl.GLES20.glBindTexture;
@@ -36,6 +37,8 @@ public class WorldShaderProgram extends ShaderProgram {
     private Vector3f lightPos;
     private boolean isParallel;
     private Vector3f camLoc;
+    private int shadowMap;
+    private int parallelHandler;
     public float zNear;
     public float zFar;
 
@@ -59,6 +62,10 @@ public class WorldShaderProgram extends ShaderProgram {
         hasTexture = glGetUniformLocation(program, "hasTexture");
         shininess =  glGetUniformLocation(program, "shininess");
         hasShadow = glGetUniformLocation(program, "hasShadow");
+        shadowMap = glGetUniformLocation(program, "shadowMap");
+
+        parallelHandler = glGetUniformLocation(program, "isParallel");
+
         //默认设置
         float [] ident = {
                 1, 0, 0, 0,
@@ -66,8 +73,8 @@ public class WorldShaderProgram extends ShaderProgram {
                 0, 0, 1, 0,
                 0, 0, 0, 1
         };
-        glUniformMatrix4fv(mMatrix, 1, false, ident, 0);
-        glUniformMatrix4fv(vpMatrix, 1, false, ident, 0);
+        //glUniformMatrix4fv(mMatrix, 1, false, ident, 0);
+        //glUniformMatrix4fv(vpMatrix, 1, false, ident, 0);
         zNear = 0.1f;
         zFar = 10f;
     }
@@ -91,8 +98,9 @@ public class WorldShaderProgram extends ShaderProgram {
         this.lightPos = lightLoc;
         this.isParallel = isParallel;
         this.camLoc = camLoc;
-        glUniform4f(mLight, lightLoc.x, lightLoc.y, lightLoc.z, isParallel?1:-1);
+        glUniform4f(mLight, lightLoc.x, lightLoc.y, lightLoc.z, 1);
         glUniform3f(mCamera, camLoc.x, camLoc.y, camLoc.z);
+        glUniform1i(parallelHandler, isParallel?1:0);
     }
 
     public void setLightColor(Vector3f lColor){
@@ -128,7 +136,7 @@ public class WorldShaderProgram extends ShaderProgram {
             return true;
         }
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_BINDING_2D, textureID);
+        glBindTexture(GL_TEXTURE_2D, textureID);
         glUniform1i(mTexture, 0);
         glUniform1i(hasTexture, 1);
         return true;
@@ -141,6 +149,10 @@ public class WorldShaderProgram extends ShaderProgram {
 
     public void setShadow(boolean state){
         glUniform1i(hasShadow, state?1:0);
+    }
+
+    public void setShadowMap(int ID){
+        glUniform1i(shadowMap, ID);
     }
 
     public Vector3f getCamLoc(){

@@ -1,5 +1,6 @@
 package com.example.a3d_dontstarve_on_android.World.Objs;
 
+import android.graphics.Rect;
 import android.opengl.GLES20;
 
 import com.example.a3d_dontstarve_on_android.ObjLoader.MtlInfo;
@@ -60,6 +61,7 @@ public class BaseModel {
         K[0] = new Vector3f(0.2f, 0.2f, 0.2f);
         K[1] = new Vector3f(0f, 0f, 0f);
         shininess = 10.0f;
+        this.isCalculated = false;
     }
 
     private int getHandlerLocation(String name) throws Exception{
@@ -187,4 +189,26 @@ public class BaseModel {
 
     }
 
+    private boolean isCalculated;
+    private Vector3f []box;
+    public Vector3f []getBox(){
+        //find max delta vector
+        Vector3f min = points.elementAt(0);
+        Vector3f max = points.elementAt(0);
+
+        if(!isCalculated){
+            for(Vector3f v: points){
+                min.x = v.x < min.x?v.x:min.x;
+                min.y = v.y < min.y?v.y:min.y;
+                min.z = v.z < min.z?v.z:min.z;
+                max.x = v.x > max.x?v.x:max.x;
+                max.y = v.y > max.y?v.y:max.y;
+                max.z = v.z > max.z?v.z:max.z;
+            }
+            box = new Vector3f[]{max, min};
+            isCalculated = true;
+        }
+
+        return box;
+    }
 }
