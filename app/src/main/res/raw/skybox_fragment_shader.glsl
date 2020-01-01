@@ -9,5 +9,5 @@ void main()
 {
 	vec4 color = textureCube(u_TextureUnit, v_Position);
 	vec4 colorn = textureCube(u_TextureUnit_n, v_Position);
-	gl_FragColor = mix(color,colorn,factor);
+	gl_FragColor = mix(colorn,color,factor);
 }

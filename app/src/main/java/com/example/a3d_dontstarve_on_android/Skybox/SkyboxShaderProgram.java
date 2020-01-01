@@ -52,7 +52,7 @@ public class SkyboxShaderProgram extends ShaderProgram {
     }
 
     public void setUniforms(float[] vmatrix,float[] pmatrix,float factor) {
-        System.out.println(factor);
+        //System.out.println(factor);
         processSkyboxT(vmatrix);
         multiplyMM(vieproMatrix,0,pmatrix,0,skyboxViewMatric,0);
 

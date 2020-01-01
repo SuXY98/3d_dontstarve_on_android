@@ -6,9 +6,10 @@ import java.util.Date;
 public final class GlobalTimer {
     private static long startTime;
     private static long currentTime;
-    static final long DAYLENGTH = 12000;
+    static final long DAYLENGTH = 120000;
     private static long lastEatTime;
     private static long lastUpdateTime;
+    private static long lastMonsterCollision;
 
     public static float getMixFactors(){
         float res = 1.0f;
@@ -26,7 +27,7 @@ public final class GlobalTimer {
     }
 
     public static void initializeTimer() {
-        startTime = currentTime = lastUpdateTime = (new Date()).getTime();
+        startTime = currentTime = lastUpdateTime = lastMonsterCollision = (new Date()).getTime();
         lastEatTime = startTime + DAYLENGTH/2;
     }
 
@@ -75,5 +76,15 @@ public final class GlobalTimer {
 
     public static long getDeltaTime() {
         return currentTime-lastUpdateTime;
+    }
+
+    public static boolean justCollided() {
+        if (currentTime-lastMonsterCollision<=1000) {
+            return true;
+        }
+        else {
+            lastMonsterCollision = currentTime;
+            return false;
+        }
     }
 }
