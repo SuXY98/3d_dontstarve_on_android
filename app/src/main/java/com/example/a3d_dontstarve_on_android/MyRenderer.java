@@ -168,14 +168,14 @@ public class MyRenderer implements GLSurfaceView.Renderer {
 
         drawSkybox();
 
-
+        glClear(GLES20.GL_DEPTH_BUFFER_BIT);
         glEnable(GLES20.GL_DEPTH_TEST);
 
         drawTerrain();
         drawNurbs();
 
         InitialWorldParam();
-       // world.renderWorld(worldShader, viewProjectionMatrix);
+        world.renderWorld(worldShader, viewProjectionMatrix);
 
         pikachu.draw(viewProjectionMatrix);
         objManager.Draw(viewProjectionMatrix,pikachu.mCamera.getPikachuPos());
@@ -205,7 +205,7 @@ public class MyRenderer implements GLSurfaceView.Renderer {
         skybox.draw();
     }
     private void InitialWorldParam(){
-        glClear(GLES20.GL_DEPTH_BUFFER_BIT);
+        //glClear(GLES20.GL_DEPTH_BUFFER_BIT);
         worldShader.useProgram();
         worldShader.setLightModel(lightLocation, pikachu.mCamera.position, true); //If need shadow show;
         worldShader.setShininess(25);

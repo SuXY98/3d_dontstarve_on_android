@@ -27,13 +27,13 @@ public class SunAndMoon {
         Matrix.setIdentityM(sunPos.getArray(), 0);
         Matrix.setIdentityM(moonPos.getArray(), 0);
         float percentage = GlobalTimer.getProcess();
-        Matrix.rotateM(sunPos.getArray(), 0,360 * percentage, 0, 1, 0  );
-        Matrix.rotateM(moonPos.getArray(), 0,360 * percentage + 180, 0, 1, 0  );
+        Matrix.rotateM(sunPos.getArray(), 0,360 * percentage + 180, 0, 0, 1 );
+        Matrix.rotateM(moonPos.getArray(), 0,360 * percentage, 0, 0, 1  );
 
-        Matrix.translateM(sunPos.getArray(), 0, 210, 0, 0);
-        Matrix.translateM(moonPos.getArray(), 0, 210, 0, 0);
+        Matrix.translateM(sunPos.getArray(), 0, 10, 0, 0);
+        Matrix.translateM(moonPos.getArray(), 0, 10, 0, 0);
 
-        Matrix.scaleM(sunPos.getArray(), 0, 5,5,5);
-        Matrix.scaleM(moonPos.getArray(), 0, 5, 5, 5);
+        Matrix.scaleM(sunPos.getArray(), 0, 0.05f,0.5f,0.5f);
+        Matrix.scaleM(moonPos.getArray(), 0, 0.05f, 0.5f, 0.5f);
     }
 }

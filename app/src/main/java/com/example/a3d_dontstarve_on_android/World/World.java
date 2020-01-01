@@ -74,6 +74,7 @@ public class World {
                 }
         );
         m.openTexture = false;
+        m.isBack = true;
         models.add(m);
 
         //sun
@@ -142,6 +143,8 @@ public class World {
             }else{
                 shader.setShadow(false);
             }
+
+            shader.setBack(models.elementAt(obj.getModelID()).isBack);
             //draw model
             try {
                 models.elementAt(obj.getModelID()).drawSelf(shader.getShaderProgramID());

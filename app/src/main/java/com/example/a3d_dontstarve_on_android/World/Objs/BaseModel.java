@@ -62,6 +62,7 @@ public class BaseModel {
         K[1] = new Vector3f(0f, 0f, 0f);
         shininess = 10.0f;
         this.isCalculated = false;
+        this.isBack = false;
     }
 
     private int getHandlerLocation(String name) throws Exception{
@@ -191,6 +192,7 @@ public class BaseModel {
 
     private boolean isCalculated;
     private Vector3f []box;
+
     public Vector3f []getBox(){
         //find max delta vector
         Vector3f min = points.elementAt(0);
@@ -211,4 +213,6 @@ public class BaseModel {
 
         return box;
     }
+
+    public boolean isBack;
 }

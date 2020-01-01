@@ -41,7 +41,7 @@ public class WorldShaderProgram extends ShaderProgram {
     private int parallelHandler;
     public float zNear;
     public float zFar;
-
+    private int isBackGround;
     public WorldShaderProgram(Context context){
         super(context, R.raw.model_vertex_shader,
                 R.raw.model_fragment_shader);
@@ -63,6 +63,7 @@ public class WorldShaderProgram extends ShaderProgram {
         shininess =  glGetUniformLocation(program, "shininess");
         hasShadow = glGetUniformLocation(program, "hasShadow");
         shadowMap = glGetUniformLocation(program, "shadowMap");
+        isBackGround = glGetUniformLocation(program, "isBackGround");
 
         parallelHandler = glGetUniformLocation(program, "isParallel");
 
@@ -157,5 +158,9 @@ public class WorldShaderProgram extends ShaderProgram {
 
     public Vector3f getCamLoc(){
         return camLoc;
+    }
+
+    public void setBack(boolean state){
+        glUniform1i(isBackGround, state?1:0);
     }
 }

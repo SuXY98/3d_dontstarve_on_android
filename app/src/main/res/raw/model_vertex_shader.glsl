@@ -2,6 +2,7 @@ uniform mat4 mMatrix;
 uniform mat4 vpMatrix;
 uniform vec4 aColor;
 uniform bool hasTexture;
+uniform bool isBackGround;
 
 varying vec3 FragPos;
 varying vec2 tCoord;
@@ -85,10 +86,30 @@ mat4 transpose(mat4 inMatrix) {
   return outMatrix;
 }
 
+mat4 genZeroLocVP(mat4 inMatrix){
+  vec4 i0 = inMatrix[0];
+  i0 = vec4(i0.xyz, 0);
+  vec4 i1 = inMatrix[1];
+  i1 = vec4(i1.xyz, 0);
+  vec4 i2 = inMatrix[2];
+  i2 = vec4(i2.xyz, 0);
+  vec4 i3 = vec4(0, 0, 0, 1);
+  mat4 outMatrix = mat4(i0,i1,i2,i3);
+
+  return outMatrix;
+}
+
 void main() {
 
   vColor=aColor;
-  gl_Position = vpMatrix* mMatrix *vec4(vPosition,1);
+  if(!isBackGround){
+    gl_Position = vpMatrix* mMatrix *vec4(vPosition,1);
+  }else{
+    vec4 tmp = genZeroLocVP(vpMatrix) * mMatrix * vec4(vPosition, 1);
+    tmp[2] = 0.99 * tmp[3];
+    gl_Position = tmp;
+  }
+
   FragPos = vec3(mMatrix * vec4(vPosition, 1.0));
   pNormal = mat3(mMatrix) * normal;
 
