@@ -103,10 +103,13 @@ public class MyRenderer implements GLSurfaceView.Renderer {
 
     public Pikachu pikachu;
 
+<<<<<<< HEAD
     private ObjManager objManager;
 
     private int collisionState;
 
+=======
+>>>>>>> 365349c5adb87d05d262ce794046049fc46dc068
     public MyRenderer(Context context){
         this.context = context;
     }
@@ -117,7 +120,9 @@ public class MyRenderer implements GLSurfaceView.Renderer {
 
         skyboxProgram = new SkyboxShaderProgram(context);
         skybox = new Skybox();
-
+        //todo:一张贴纸显示怪物，还需要做一个怪物（或资源）的管理类
+        boardImgShader = new BoardImgShader(context,R.drawable.monster_wolf);
+        boardImg = new BoardImg();
         //todo: 在地形上构造一个NURBS曲面山
         terrainShader = new TerrainShader(context,R.drawable.grass);
         terrain = new Terrain();
@@ -189,6 +194,12 @@ public class MyRenderer implements GLSurfaceView.Renderer {
         terrainShader.useProgram();
         terrainShader.setUniforms(viewMatrix,projectionMatrix,terrainMMatrix);
         terrain.draw(terrainShader);
+    }
+
+    private void drawBoardImg(){
+        boardImgShader.useProgram();
+        boardImgShader.setUniforms(viewMatrix,projectionMatrix,boarimgMMatrix,pikachu.mCamera.front,boardImg.boardPos);
+        boardImg.draw(boardImgShader);
     }
 
     private void drawSkybox(){
