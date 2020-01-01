@@ -13,10 +13,12 @@ public class Object {
     private int ModelID;
     private Matrix4f modelViewMat;
     private Vector3f mColor;
+    public boolean drawShadow;
     public Object(int ModelID){
         this.ModelID = ModelID;
         this.modelViewMat = new Matrix4f();
         this.mColor = new Vector3f(1,1,1);
+        this.drawShadow = true;
     }
 
     public void setModelViewMat(Matrix4f modelViewMat) {

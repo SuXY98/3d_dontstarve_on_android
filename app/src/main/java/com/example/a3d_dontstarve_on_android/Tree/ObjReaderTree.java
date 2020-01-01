@@ -3,7 +3,7 @@ package com.example.a3d_dontstarve_on_android.Tree;
 import android.content.Context;
 import android.util.Log;
 
-import com.example.a3d_dontstarve_on_android.Monster.Obj3DMonster;
+
 import com.example.a3d_dontstarve_on_android.ObjLoader.MtlInfo;
 
 import java.io.BufferedReader;
@@ -17,7 +17,7 @@ import java.util.Map;
 
 public class ObjReaderTree {
 
-    public static void read(InputStream stream, Obj3DMonster obj3D){
+    public static void read(InputStream stream, Obj3DTree obj3D){
         ArrayList<Float> alv=new ArrayList<Float>();//原始顶点坐标列表
         ArrayList<Float> alvResult=new ArrayList<Float>();//结果顶点坐标列表
         ArrayList<Float> norlArr=new ArrayList<>();
@@ -85,9 +85,9 @@ public class ObjReaderTree {
         }
     }
 
-    public static List<Obj3DMonster> readMultiObj(Context context, String file){
+    public static List<Obj3DTree> readMultiObj(Context context, String file){
         boolean isAssets;
-        ArrayList<Obj3DMonster> data=new ArrayList<>();
+        ArrayList<Obj3DTree> data=new ArrayList<>();
         ArrayList<Float> oVs=new ArrayList<Float>();//原始顶点坐标列表
         ArrayList<Float> oVNs=new ArrayList<>();    //原始顶点法线列表
         ArrayList<Float> oVTs=new ArrayList<>();    //原始贴图坐标列表
@@ -95,8 +95,8 @@ public class ObjReaderTree {
         ArrayList<Float> oFVNs=new ArrayList<>();
         ArrayList<Float> oFVTs=new ArrayList<>();
         HashMap<String, MtlInfo> mTls=null;
-        HashMap<String,Obj3DMonster> mObjs=new HashMap<>();
-        Obj3DMonster nowObj=null;
+        HashMap<String,Obj3DTree> mObjs=new HashMap<>();
+        Obj3DTree nowObj=null;
         MtlInfo nowMtl=null;
         try{
             String parent;
@@ -137,7 +137,7 @@ public class ObjReaderTree {
                             if(mObjs.containsKey(tempsa[1])){
                                 nowObj=mObjs.get(tempsa[1]);
                             }else{
-                                nowObj=new Obj3DMonster();
+                                nowObj=new Obj3DTree();
                                 nowObj.mtl=nowMtl;
                                 mObjs.put(tempsa[1],nowObj);
                             }
@@ -183,8 +183,8 @@ public class ObjReaderTree {
         }catch (Exception e){
             e.printStackTrace();
         }
-        for (Map.Entry<String, Obj3DMonster> stringObj3DEntry : mObjs.entrySet()) {
-            Obj3DMonster obj = stringObj3DEntry.getValue();
+        for (Map.Entry<String, Obj3DTree> stringObj3DEntry : mObjs.entrySet()) {
+            Obj3DTree obj = stringObj3DEntry.getValue();
             data.add(obj);
             obj.dataLock();
         }

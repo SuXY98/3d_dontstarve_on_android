@@ -6,9 +6,24 @@ import java.util.Date;
 public final class GlobalTimer {
     private static long startTime;
     private static long currentTime;
-    static final long DAYLENGTH = 120000;
+    static final long DAYLENGTH = 12000;
     private static long lastEatTime;
     private static long lastUpdateTime;
+
+    public static float getMixFactors(){
+        float res = 1.0f;
+        float pass = currentTime - startTime;
+        if(pass< (float)(DAYLENGTH * 4 / 10)){
+            res = 1;
+        }else if((pass < (float)(DAYLENGTH / 2) )&& (pass> (float)(DAYLENGTH * 4 / 10))){
+            res = 1 - (pass*10 - (float)(DAYLENGTH * 4))/(DAYLENGTH );
+        }else if((pass < (float)(DAYLENGTH *9/ 10) )){
+            res  = 0;
+        }else{
+            res = (pass * 10 - DAYLENGTH*9)/DAYLENGTH;
+        }
+        return res;
+    }
 
     public static void initializeTimer() {
         startTime = currentTime = lastUpdateTime = (new Date()).getTime();
@@ -28,6 +43,9 @@ public final class GlobalTimer {
         return currentTime - startTime;
     }
 
+    public static float getProcess(){
+        return (currentTime - startTime) / (float)DAYLENGTH;
+    }
     public static void updateTimer() {
         currentTime = (new Date()).getTime();
         if (currentTime - startTime>=DAYLENGTH) {
