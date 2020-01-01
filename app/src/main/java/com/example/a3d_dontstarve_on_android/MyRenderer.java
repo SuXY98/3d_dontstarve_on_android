@@ -39,6 +39,8 @@ import com.example.a3d_dontstarve_on_android.Terrain.TerrainShader;
 import com.example.a3d_dontstarve_on_android.World.World;
 import com.example.a3d_dontstarve_on_android.World.WorldShaderProgram;
 
+import java.util.Vector;
+
 import util.MatrixHelper;
 
 /*
@@ -146,12 +148,30 @@ public class MyRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onDrawFrame(GL10 glUnused) {
         checkHP();
-
         GlobalTimer.updateTimer();
+
         if (moveDirection>0) {
             pikachu.mCamera.move(moveDirection, (float)GlobalTimer.getDeltaTime()/20);
             pikachu.changeDisplayAngle(moveDirection);
         }
+
+        if (isCollided(pikachu.mCamera.getPikachuPos(), objManager.GetObjsAttri()) && moveDirection>0) {
+            int tempDirection = 0;
+            if (moveDirection == 1) {
+                tempDirection = 3;
+            } else if (moveDirection ==3) {
+                tempDirection =1;
+            }
+            else if (moveDirection==2) {
+                tempDirection =4;
+            }
+            else if (moveDirection==4) {
+                tempDirection = 2;
+            }
+            pikachu.mCamera.move(tempDirection, (float)GlobalTimer.getDeltaTime()/20);
+        }
+
+
         GlobalTimer.resetLastUpdateTime();
 
         glViewport(0,0,wWidth,wHeight);
@@ -276,5 +296,39 @@ public class MyRenderer implements GLSurfaceView.Renderer {
             Intent intent=new Intent(context,GameOver.class);
             context.startActivity(intent);
         }
+    }
+
+    public boolean isCollided(Vector3f model, Vector<objAttri> attris){
+        //因为是球,设置碰撞半径
+        float length = 1;
+        boolean ret = false;
+        boolean collideMonster = false;
+        boolean collideFruit = false;
+        for(int i=attris.size()-1; i>=0; i--){
+            if(model.distance(attris.elementAt(i).pos) < length){
+                switch(attris.elementAt(i).type){
+                    case TREE:
+                        ret = true;
+                        break;
+                    case FRUIT:
+                        attris.remove(i);
+                        collideFruit = true;
+                        break;
+                    case MONSTER:
+                        collideMonster = true;
+                        break;
+                }
+            }
+        }
+        if (collideFruit) {
+            pikachuState.handleCollision(0);
+        }
+        if (collideMonster) {
+            if (!GlobalTimer.justCollided()) {
+                pikachuState.handleCollision(1);
+            }
+        }
+        //0 没撞到, 1树/山 2怪物 3 水果
+        return ret;
     }
 }
