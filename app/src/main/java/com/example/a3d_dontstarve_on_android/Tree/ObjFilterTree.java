@@ -20,7 +20,7 @@ public class ObjFilterTree  extends AFilter {
     private int mHKa;
     private int mHKd;
     private int mHKs;
-    private Obj3DMonster obj;
+    private Obj3DTree obj;
 
     private int textureId;
 
@@ -28,7 +28,7 @@ public class ObjFilterTree  extends AFilter {
         super(mRes);
     }
 
-    public void setObj3D(Obj3DMonster obj){
+    public void setObj3D(Obj3DTree obj){
         this.obj=obj;
     }
 
@@ -47,12 +47,14 @@ public class ObjFilterTree  extends AFilter {
         //打开深度检测
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
         if(obj!=null&&obj.mtl!=null){
-            try {
-                Log.e("obj","texture-->"+"character/"+obj.mtl.map_Kd);
-                textureId=createTexture(BitmapFactory.decodeStream(mRes.getAssets().open("monster/"+obj.mtl.map_Kd)));
-                setTextureId(textureId);
-            } catch (IOException e) {
-                e.printStackTrace();
+            if(obj.mtl.map_Kd != null) {
+                try {
+                    Log.e("obj", "texture-->" + "character/" + obj.mtl.map_Kd);
+                    textureId = createTexture(BitmapFactory.decodeStream(mRes.getAssets().open("tree/" + obj.mtl.map_Kd)));
+                    setTextureId(textureId);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

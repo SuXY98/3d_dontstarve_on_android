@@ -1,8 +1,11 @@
-
+# 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
+# 创建的文件:05.12.2015 09:19:25
 
 mtllib file.mtl
 
-
+#
+# object 简模树070ok
+#
 
 v  -16.3955 174.8804 10.1993
 v  -11.9768 170.9244 8.2989
