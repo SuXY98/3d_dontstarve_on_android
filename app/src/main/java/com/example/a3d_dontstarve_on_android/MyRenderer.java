@@ -188,13 +188,13 @@ public class MyRenderer implements GLSurfaceView.Renderer {
 
     private void drawNurbs(){
         nurbsShader.useProgram();
-        nurbsShader.setUniforms(viewMatrix,projectionMatrix);
+        nurbsShader.setUniforms(viewMatrix,projectionMatrix,GlobalTimer.getMixFactors());
         nurbssurf.draw(nurbsShader);
     }
 
     private void drawTerrain(){
         terrainShader.useProgram();
-        terrainShader.setUniforms(viewMatrix,projectionMatrix,terrainMMatrix);
+        terrainShader.setUniforms(viewMatrix,projectionMatrix,terrainMMatrix,GlobalTimer.getMixFactors());
         terrain.draw(terrainShader);
     }
 
