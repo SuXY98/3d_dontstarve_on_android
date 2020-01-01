@@ -320,6 +320,12 @@ public class MyRenderer implements GLSurfaceView.Renderer {
                 }
             }
         }
+        if (model.x>-29 && model.x<29 && model.z>-29 && model.z<29) {
+            ret = true;
+        }
+        if (model.x<-180 || model.x>180 || model.z<-180 || model.z>180) {
+            ret = true;
+        }
         if (collideFruit) {
             pikachuState.handleCollision(0);
         }

@@ -22,7 +22,7 @@ public class Camera {
         velocity = 0.2f;
         sight = 10.0f;
 
-        position = new Vector3f(0, 3, -10);
+        position = new Vector3f(40, 3, -45);
         worldUp = new Vector3f(0, 1, 0);
 
         front = new Vector3f();
