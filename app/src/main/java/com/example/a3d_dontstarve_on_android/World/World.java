@@ -90,10 +90,21 @@ public class World {
         objs.elementAt(1).drawShadow = false;
     }
 
-    public void renderWorld(WorldShaderProgram shader, float[] vpMatrix) {
+    public void renderWorld(WorldShaderProgram shader, float[] pMatrix, float [] vMatrix) {
         objs.elementAt(0).setModelViewMat(sunAndMoon.getSunPos());
         objs.elementAt(1).setModelViewMat(sunAndMoon.getMoonPos());
-        render(shader, vpMatrix, false, true);
+        float [] vpMatrix = new float[16];
+        Matrix.multiplyMM(vpMatrix, 0, pMatrix, 0, vMatrix, 0);
+        vMatrix[3] = 0;
+        vMatrix[7] = 0;
+        vMatrix[11] = 0;
+        vMatrix[12] = 0;
+        vMatrix[13] = 0;
+        vMatrix[14] = 0;
+        vMatrix[15] = 0;
+        Matrix.multiplyMM(vMatrix, 0, pMatrix, 0, vMatrix, 0);
+        render(shader, vMatrix, vpMatrix, false, true);
+
     }
     private Bitmap readBufferPixelToBitmap(int width, int height) {
         ByteBuffer buf = ByteBuffer.allocateDirect(width * height * 4);
@@ -106,7 +117,10 @@ public class World {
         return bmp;
     }
 
-    private void render(WorldShaderProgram shader, float[] vpMatrix, boolean drawTex, boolean drawShadow){
+    private void render(WorldShaderProgram shader, float[] vMatrix, float[] vpMatrix, boolean drawTex, boolean drawShadow){
+        if(vMatrix != null){
+            shader.setvMatrix(vMatrix);
+        }
         if(shader.isFail()){
             System.out.println("Shader is Broken, render world exit...\n");
             return;
@@ -190,7 +204,7 @@ public class World {
         glClear(GL_DEPTH_BUFFER_BIT);
         try{
             //rendering scene in the light space
-            render(shader, computeLightMat(shader).getArray(), false, false);
+            render(shader, null, computeLightMat(shader).getArray(),  false, false);
         }catch(Exception e){
             e.printStackTrace(); //Actually never happen
         }

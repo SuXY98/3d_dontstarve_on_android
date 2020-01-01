@@ -194,7 +194,7 @@ public class MyRenderer implements GLSurfaceView.Renderer {
         drawNurbs();
 
         InitialWorldParam();
-        world.renderWorld(worldShader, viewProjectionMatrix);
+        world.renderWorld(worldShader, projectionMatrix, viewMatrix);
 
         pikachu.draw(viewProjectionMatrix);
         objManager.Draw(viewProjectionMatrix,pikachu.mCamera.getPikachuPos());

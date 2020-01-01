@@ -42,6 +42,7 @@ public class WorldShaderProgram extends ShaderProgram {
     public float zNear;
     public float zFar;
     private int isBackGround;
+    private int vMatrix;
     public WorldShaderProgram(Context context){
         super(context, R.raw.model_vertex_shader,
                 R.raw.model_fragment_shader);
@@ -66,7 +67,7 @@ public class WorldShaderProgram extends ShaderProgram {
         isBackGround = glGetUniformLocation(program, "isBackGround");
 
         parallelHandler = glGetUniformLocation(program, "isParallel");
-
+        vMatrix = glGetUniformLocation(program, "vMatrix");
         //默认设置
         float [] ident = {
                 1, 0, 0, 0,
@@ -78,6 +79,10 @@ public class WorldShaderProgram extends ShaderProgram {
         //glUniformMatrix4fv(vpMatrix, 1, false, ident, 0);
         zNear = 0.1f;
         zFar = 10f;
+    }
+
+    public void setvMatrix(float[] vMat) {
+        glUniformMatrix4fv(vMatrix, 1, false, vMat, 0);
     }
 
     public int getShaderProgramID(){
