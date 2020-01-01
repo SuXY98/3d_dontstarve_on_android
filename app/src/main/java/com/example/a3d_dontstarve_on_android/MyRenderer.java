@@ -8,6 +8,7 @@ import android.opengl.Matrix;
 import android.renderscript.Matrix4f;
 
 import static android.opengl.GLES20.GL_BLEND;
+import static android.opengl.GLES20.GL_DEPTH_BUFFER_BIT;
 import static android.opengl.GLES20.GL_DEPTH_TEST;
 import static android.opengl.GLES20.GL_ONE;
 import static android.opengl.GLES20.glBlendFunc;
@@ -17,21 +18,21 @@ import static android.opengl.GLES20.glClearColor;
 import static android.opengl.GLES20.glDisable;
 import static android.opengl.GLES20.glEnable;
 import static android.opengl.GLES20.glFinish;
+import static android.opengl.GLES20.glGetError;
 import static android.opengl.GLES20.glViewport;
 import static android.opengl.Matrix.multiplyMM;
 import static android.opengl.Matrix.rotateM;
 import static android.opengl.Matrix.translateM;
 
+import javax.microedition.khronos.egl.EGL;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import com.example.a3d_dontstarve_on_android.Character.Pikachu;
-import com.example.a3d_dontstarve_on_android.Fruit.Fruit;
+import com.example.a3d_dontstarve_on_android.BoardImg.BoardImg;
+import com.example.a3d_dontstarve_on_android.BoardImg.BoardImgShader;
 import com.example.a3d_dontstarve_on_android.Interface.ArrowButton;
 import com.example.a3d_dontstarve_on_android.Interface.PikachuState;
-import com.example.a3d_dontstarve_on_android.Monster.Monster;
-import com.example.a3d_dontstarve_on_android.Nurbs.NurbsShader;
-import com.example.a3d_dontstarve_on_android.Nurbs.Nurbssurf;
 import com.example.a3d_dontstarve_on_android.Skybox.SkyboxShaderProgram;
 import com.example.a3d_dontstarve_on_android.Skybox.Skybox;
 import com.example.a3d_dontstarve_on_android.Terrain.Terrain;
@@ -48,9 +49,9 @@ import util.MatrixHelper;
 
 public class MyRenderer implements GLSurfaceView.Renderer {
     static float[] identMat = {1, 0, 0, 0,
-            0, 1, 0, 0,
-            0, 0, 1, 0,
-            0, 0, 0, 1};
+                                0, 1, 0, 0,
+                                0, 0, 1, 0,
+                                0, 0, 0, 1};
 
     private final Context context;
     private final float[] projectionMatrix = new float[16];
@@ -61,6 +62,8 @@ public class MyRenderer implements GLSurfaceView.Renderer {
     private SkyboxShaderProgram skyboxProgram;
     private Skybox skybox;
 
+    private BoardImg boardImg;
+    private BoardImgShader boardImgShader;
     private float[] boarimgMMatrix = new float[]{
             1,0,0,0,
             0,1,0,0,
@@ -70,9 +73,6 @@ public class MyRenderer implements GLSurfaceView.Renderer {
 
     private Terrain terrain;
     private TerrainShader terrainShader;
-    private Nurbssurf nurbssurf;
-    private NurbsShader nurbsShader;
-
     private float[] terrainMMatrix = new float[]{
             1,0,0,0,
             0,1,0,0,
@@ -100,36 +100,31 @@ public class MyRenderer implements GLSurfaceView.Renderer {
 
     public Pikachu pikachu;
 
-    private ObjManager objManager;
-
     public MyRenderer(Context context){
         this.context = context;
     }
     @Override
     public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
-
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         arrowButton = new ArrowButton(context);
 
         skyboxProgram = new SkyboxShaderProgram(context);
         skybox = new Skybox();
         //todo:一张贴纸显示怪物，还需要做一个怪物（或资源）的管理类
+        boardImgShader = new BoardImgShader(context,R.drawable.monster_wolf);
+        boardImg = new BoardImg();
         //todo: 在地形上构造一个NURBS曲面山
         terrainShader = new TerrainShader(context,R.drawable.grass);
         terrain = new Terrain();
-        nurbsShader = new NurbsShader(context);
-        nurbssurf = new Nurbssurf();
 
         worldShader = new WorldShaderProgram(context);world = new World(context);
-        lightLocation = new Vector3f(2, 2, -2);
+        lightLocation = new Vector3f(2, -2, 0);
         moveDirection = 0;
 
         pikachu = new Pikachu(this.context);
         moveSpeed = 0.1f;
 
         pikachuState = new PikachuState(this.context);
-
-        objManager = new ObjManager(this.context);
 
         GlobalTimer.initializeTimer();
     }
@@ -142,11 +137,11 @@ public class MyRenderer implements GLSurfaceView.Renderer {
         // Set the OpenGL viewport to fill the entire surface.
         glViewport(0,0,width,height);
         MatrixHelper.perspectiveM(projectionMatrix, 45, (float) width
-                / (float) height, 0.1f, 100f);
+                / (float) height, 0.1f, 200f);
     }
     @Override
     public void onDrawFrame(GL10 glUnused) {
-        checkHP();
+        //checkHP();
 
         GlobalTimer.updateTimer();
         if (moveDirection>0) {
@@ -164,32 +159,26 @@ public class MyRenderer implements GLSurfaceView.Renderer {
          *       rotate viewProjection
          * */
         viewMatrix = pikachu.mCamera.getViewMatrix();
-        multiplyMM(viewProjectionMatrix,0,projectionMatrix,0,viewMatrix,0);
+        multiplyMM(viewProjectionMatrix,0,projectionMatrix,0,viewMatrix,0);;
+        glEnable(GLES20.GL_DEPTH_TEST);
+        glDisable(GL_DEPTH_TEST);
 
-        drawSkybox();
-
+//        drawSkybox();
+//        drawBoardImg();
+//        drawTerrain();
 
         glEnable(GLES20.GL_DEPTH_TEST);
 
-        drawTerrain();
-        drawNurbs();
-
-        InitialWorldParam();
-       // world.renderWorld(worldShader, viewProjectionMatrix);
-
-        pikachu.draw(viewProjectionMatrix);
-        objManager.Draw(viewProjectionMatrix,pikachu.mCamera.getPikachuPos());
+        InitialWorldParam(true);
+        world.renderWorld(worldShader, viewProjectionMatrix);
+//        pikachu.draw(viewProjectionMatrix);
 
         glDisable(GL_DEPTH_TEST);
 
         drawArrowBottons();
         drawPikachuState();
-    }
 
-    private void drawNurbs(){
-        nurbsShader.useProgram();
-        nurbsShader.setUniforms(viewMatrix,projectionMatrix);
-        nurbssurf.draw(nurbsShader);
+
     }
 
     private void drawTerrain(){
@@ -198,20 +187,29 @@ public class MyRenderer implements GLSurfaceView.Renderer {
         terrain.draw(terrainShader);
     }
 
+    private void drawBoardImg(){
+        boardImgShader.useProgram();
+        boardImgShader.setUniforms(viewMatrix,projectionMatrix,boarimgMMatrix,pikachu.mCamera.front,boardImg.boardPos);
+        boardImg.draw(boardImgShader);
+    }
+
     private void drawSkybox(){
         skyboxProgram.useProgram();
         skyboxProgram.setUniforms(viewMatrix,projectionMatrix);
         skybox.bindData(skyboxProgram);
         skybox.draw();
     }
-    private void InitialWorldParam(){
+
+    private void InitialWorldParam(boolean initShadow){
         glClear(GLES20.GL_DEPTH_BUFFER_BIT);
         worldShader.useProgram();
-        worldShader.setLightModel(lightLocation, pikachu.mCamera.position, true); //If need shadow show;
+        worldShader.setLightModel(lightLocation, pikachu.mCamera.position, true);
         worldShader.setShininess(25);
         worldShader.setLightColor(new Vector3f(1, 1, 1));
-        //world.InitShadow(worldShader, wWidth, wHeight);
+        if(initShadow)
+            world.InitShadow(worldShader, wWidth, wHeight);
     }
+
 
     private void drawArrowBottons() {
         glEnable(GL_BLEND);
